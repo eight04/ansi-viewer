@@ -47,7 +47,7 @@ function createViewer() {
             var self = this,
                 result = bbsReader(this.data);
                 
-            var html = "<!DOCTPYE><html><head><title>" + (result.title ? result.title : "ANSI Viewer") + "</title><link rel='stylesheet' href='" + module.uri + "/../../viewer/viewer.css'><script src='" + module.uri + "/../../viewer/viewer.js'></script></head><body>" + result.html + "</body></html>";
+            var html = "<!DOCTPYE><html><head><title>" + (result.title ? result.title : "ANSI Viewer") + "</title><script src='" + module.uri + "/../../node_modules/mousetrap/mousetrap.min.js'></script><link rel='stylesheet' href='" + module.uri + "/../../public/viewer.css'><script src='" + module.uri + "/../../public/viewer.js'></script></head><body>" + result.html + "</body></html>";
             
             uao.b2u(html, function(result) {
                 var converter = new ScriptableUnicodeConverter();
