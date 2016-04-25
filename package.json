@@ -1,0 +1,18 @@
+{
+  "title": "ANSI Viewer",
+  "name": "ansi-viewer",
+  "version": "0.0.1",
+  "description": "View ANSI file in the browser",
+  "main": "lib/index.js",
+  "author": "eight04 <eight04@gmail.com>",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ],
+  "dependencies": {
+  }
+}
