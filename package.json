@@ -3,7 +3,7 @@
   "name": "ansi-viewer",
   "version": "0.0.1",
   "description": "View ANSI file in the browser",
-  "main": "lib/index.js",
+  "main": "main/index.js",
   "author": "eight04 <eight04@gmail.com>",
   "engines": {
     "firefox": ">=38.0a1",
@@ -14,5 +14,6 @@
     "jetpack"
   ],
   "dependencies": {
+    "mousetrap": "https://github.com/mousetrap-js/mousetrap/archive/1.5.5.tar.gz"
   }
 }
