@@ -15,5 +15,10 @@
   ],
   "dependencies": {
     "mousetrap": "https://github.com/mousetrap-js/mousetrap/archive/1.5.5.tar.gz"
+  },
+  "scripts": {
+    "test": "eslint main/**/*.js public/*.js",
+    "preversion": "npm test",
+    "postversion": "jpm xpi && git push --follow-tags"
   }
 }
