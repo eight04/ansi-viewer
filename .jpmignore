@@ -2,3 +2,6 @@
 
 *.bak
 *.xpi
+
+node_modules/mousetrap
+!node_modules/mousetrap/mousetrap.min.js
