@@ -163,7 +163,7 @@ function bbsReader(data) {
     
     result += "<div class='line'>" + makeSpan(color);
     
-    var j;
+    var j, cleanLine;
     
     for (; i < data.length; i++) {
         // Special color
@@ -171,12 +171,14 @@ function bbsReader(data) {
             var ch = data.substr(i, 2);
             if (ch == "\xa1\xb0") {
                 // ※
+                cleanLine = true;
                 color.f = 2;
                 color.b = 0;
                 color.l = 0;
                 result += "</span>" + makeSpan(color);
             } else if (ch == ": ") {
                 // : 
+                cleanLine = true;
                 color.f = 6;
                 color.b = 0;
                 color.l = 0;
@@ -212,6 +214,13 @@ function bbsReader(data) {
             // Big5 high byte
             left = data[i];
         } else if (data[i] == "\n") {
+            if (cleanLine) {
+                color.f = 7;
+                color.b = 0;
+                color.l = 0;
+                color.flash = false;
+                cleanLine = false;
+            }
             result += "</span></div><div class='line'>" + makeSpan(color);
             pos = 0;
         } else {
