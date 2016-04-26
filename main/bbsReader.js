@@ -166,47 +166,46 @@ function bbsReader(data) {
     var j;
     
     for (; i < data.length; i++) {
-        if (data[i] == "\x1b") {
-            // ESC
-            if (!left) {
-                result += "</span>";
-                j = extractColor(data, i, color);
-                result += makeSpan(color);
-                if (j >= 0) {
-                    i = j - 1;
-                } else {
-                    result += "*";
-                    pos++;
-                }
-            } else {
-                result += left;
-                pos++;
-                j = extractColor(data, i, color);
-                if (j >= 0) {
-                    if (j < data.length) {
-                        result += data[j] + "</span>" + makeSpan(color, true) + left + data[j];
-                        pos++;
-                    } else {
-                        result += "</span>" + makeSpan(color, true);
-                    }
-                    i = j;
-                } else {
-                    result += "*";
-                    pos++;
-                }
-                left = null;
-            }
-        } else if (left) {
-            var ch = left + data[i];
-            if (ch == "\xa1\xb0" && pos == 0) {
+        // Special color
+        if (pos == 0) {
+            var ch = data.substr(i, 2);
+            if (ch == "\xa1\xb0") {
                 // ※
                 color.f = 2;
                 color.b = 0;
                 color.l = 0;
-                result += "</span>" + makeSpan(color) + ch;
-            } else {
-                result += ch;
+                result += "</span>" + makeSpan(color);
+            } else if (ch == ": ") {
+                // : 
+                color.f = 6;
+                color.b = 0;
+                color.l = 0;
+                result += "</span>" + makeSpan(color);
             }
+        }
+        if (data[i] == "\x1b") {
+            // ESC
+            j = extractColor(data, i, color);
+            if (j < 0) {
+                if (left) {
+                    result += left;
+                    pos++;
+                }
+                result += "*";
+                pos++;
+            } else {
+                if (left) {
+                    result += left + data[j] + "</span>" + makeSpan(color, true) + left + data[j];
+                    pos += 2;
+                    i = j;
+                } else {
+                    result += "</span>" + makeSpan(color);
+                    i = j - 1;
+                }
+            }
+            left = null;            
+        } else if (left) {
+            result += left + data[i];
             pos += 2;
             left = null;
         } else if (data.charCodeAt(i) & 0x80) {
