@@ -27,5 +27,12 @@ Screenshots
 Changelog
 ---------
 
+* 0.1.1 (Apr 26, 2016)
+    
+    - Fix license.
+    - Fix color overflow bug.
+    - Add color for replies. (`: `)
+    
 * 0.1.0 (Apr 25, 2016)
+
     - First release.
