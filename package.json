@@ -9,7 +9,7 @@
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "MIT",
+  "license": "GPLv2",
   "keywords": [
     "jetpack"
   ],
