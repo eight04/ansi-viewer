@@ -3,5 +3,14 @@
 *.bak
 *.xpi
 
+.eslintrc.json
+.jpmignore
+.gitignore
+
 node_modules/mousetrap
 !node_modules/mousetrap/mousetrap.min.js
+
+node_modules/uao-js
+!node_modules/uao-js/table
+!node_modules/uao-js/index.js
+!node_modules/uao-js/package.json
