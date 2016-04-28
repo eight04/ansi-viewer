@@ -27,6 +27,11 @@ Screenshots
 Changelog
 ---------
 
+* 1.0.0 (Apr 28, 2016)
+
+	- Move to uao-js.
+	- License change to MIT.
+
 * 0.1.1 (Apr 26, 2016)
     
     - Fix license.
