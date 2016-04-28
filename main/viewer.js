@@ -7,7 +7,7 @@ var {Class} = require("sdk/core/heritage"),
 		"@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter"
 	),
 	
-	{uao} = require("./uao/uao"),
+	uao = require("uao-js"),
 	bbsReader = require("./bbsReader");
 	
 function createViewer() {
@@ -44,24 +44,23 @@ function createViewer() {
         
         onStopRequest: function(aRequest, aContext, aStatusCode) {
             
-            var self = this,
-                result = bbsReader(this.data);
+            var result = bbsReader(this.data);
                 
-            var html = "<!DOCTPYE><html><head><title>" + (result.title ? result.title : "ANSI Viewer") + "</title><script src='" + module.uri + "/../../node_modules/mousetrap/mousetrap.min.js'></script><link rel='stylesheet' href='" + module.uri + "/../../public/viewer.css'><script src='" + module.uri + "/../../public/viewer.js'></script></head><body>" + result.html + "</body></html>";
+            result = "<!DOCTPYE><html><head><title>" + (result.title ? result.title : "ANSI Viewer") + "</title><script src='" + module.uri + "/../../node_modules/mousetrap/mousetrap.min.js'></script><link rel='stylesheet' href='" + module.uri + "/../../public/viewer.css'><script src='" + module.uri + "/../../public/viewer.js'></script></head><body>" + result.html + "</body></html>";
             
-            uao.b2u(html, function(result) {
-                var converter = new ScriptableUnicodeConverter();
-                converter.charset = "UTF-8";
-                var output = converter.convertToInputStream(result);
-                
-                self.listener.onStartRequest(aRequest, aContext); 
-                
-                self.listener.onDataAvailable(aRequest, aContext, output, 0, output.available());
-                
-                self.listener.onStopRequest(aRequest, aContext, aStatusCode);
-                
-                self.initialize();
-            });            
+            result = uao.decode(result);
+            
+            var converter = new ScriptableUnicodeConverter();
+            converter.charset = "UTF-8";
+            var output = converter.convertToInputStream(result);
+            
+            this.listener.onStartRequest(aRequest, aContext); 
+            
+            this.listener.onDataAvailable(aRequest, aContext, output, 0, output.available());
+            
+            this.listener.onStopRequest(aRequest, aContext, aStatusCode);
+            
+            this.initialize();
         }
     });
 }

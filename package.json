@@ -14,7 +14,8 @@
     "jetpack"
   ],
   "dependencies": {
-    "mousetrap": "https://github.com/mousetrap-js/mousetrap/archive/1.5.5.tar.gz"
+    "mousetrap": "https://github.com/mousetrap-js/mousetrap/archive/1.5.5.tar.gz",
+    "uao-js": "^0.1.1"
   },
   "scripts": {
     "test": "eslint main/**/*.js public/*.js",
