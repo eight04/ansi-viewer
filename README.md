@@ -6,7 +6,7 @@ A Firefox addon which let you view .ans file in the browser.
 Features
 --------
 
-* Builtin Big5-UAO. Thanks for [BBSFox-E10S](https://github.com/ettoolong/BBSFox-E10S)!
+* Support big5-uao.
 * ANSI Color.
 * Half CJK coloring.
 * Draw header.
