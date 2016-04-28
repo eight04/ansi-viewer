@@ -81,6 +81,7 @@ function extractColor(text, i, color) {
             color.l = 0;
             color.f = 7;
             color.b = 0;
+            color.flash = false;
         } else if (code == 1) {
             color.l = 1;
         } else if (code == 5) {
