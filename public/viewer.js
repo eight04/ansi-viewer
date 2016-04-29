@@ -17,6 +17,25 @@ var keyMap = {
 	Enter: "\n"
 };
 
+var nameMap = {
+	"@P": "PgUp",
+	"@N": "PgDn",
+	"@E": "End",
+	"@H": "Home",
+	"@l": "←",
+	"@r": "→",
+	"@u": "↑",
+	"@d": "↓",
+	"@b": "Back",
+	"@I": "Ins",
+	"@D": "Del"
+};
+
+function getKeyName(key) {
+	// map key back to name for displaying
+	return nameMap[key] || key;
+}
+
 var pmore;
 
 document.addEventListener("keydown", function(e) {
@@ -51,69 +70,122 @@ document.addEventListener("keydown", function(e) {
 
 function grabFrames() {
 	var lines = document.querySelectorAll(".line"),
-		i, result = [], frames = [];
+		i, result = [];
 		
 	for (i = 0; i < lines.length; i++) {
 		if (/^\^L/.test(lines[i].textContent)) {
 			result.push({
 				line: i,
-				control: lines[i].textContent
+				control: lines[i].textContent,
+				blackout: null
 			});
-			frames.push(lines[i]);
+			lines[i].classList.add("frame");
 		}
 	}
-	return {
-		result: result,
-		frames: frames
-	};
+	
+	for (i = 0; i < result.length - 1; i++) {
+		result[i].blackout = lines[result[i + 1].line];
+	}
+	return result;
 }
 
-function Viewer(frames) {
+function Viewer() {
+	var statusBar = document.querySelector(".statusbar"),
+		lines = document.querySelectorAll(".line"),
+		blackout;
+	
+	function drawOptions(options) {
+		var i, frag = document.createDocumentFragment();
+		for (i = 0; i < options.length; i++) {
+			var span = document.createElement("span"),
+				key = document.createElement("span"),
+				message = document.createElement("span");
+				
+			span.className = "option";
+				
+			key.className = "key";
+			key.textContent = getKeyName(options[i].key);
+			
+			message.className = "message";
+			message.textContent = options[i].message;
+			
+			span.appendChild(key);
+			span.appendChild(message);
+			
+			frag.appendChild(span);
+		}
+		return frag;
+	}
+	
+	function drawSpan(text) {
+		var span = document.createElement("span");
+		span.className = "option";
+		span.textContent = text;
+		return span;
+	}
+	
 	return {
 		scrollTo: function(frame) {
-			console.log("frame", frame);
-			document.querySelectorAll(".line")[frame.line + 1].scrollIntoView();
+			if (blackout) {
+				blackout.classList.remove("blackout");
+				blackout = null;
+			}
+			lines[frame.line + 1].scrollIntoView();
+			if (frame.blackout) {
+				frame.blackout.classList.add("blackout");
+				blackout = frame.blackout;
+			};
 		},
 		scrollToLine: function(i) {
-			console.log("line", i);
-			document.querySelectorAll(".line")[i].scrollToView();
+			lines[i].scrollToView();
 		},
 		getPageSize: function() {
 			return 23;
 		},
 		pause: function() {
-			console.log("pause");
+			statusBar.innerHTML = "";
+			statusBar.appendChild(drawSpan("動畫暫停，按任意鍵繼續"));
+			statusBar.classList.remove("hidden");
 		},
 		unpause: function() {
-			console.log("unpause");
+			statusBar.classList.add("hidden");
 		},
 		forceEnd: function() {
-			console.log("force end");
+			alert("強制中斷動畫！");
 		},
 		end: function() {
-			console.log("end");
+			if (blackout) {
+				blackout.classList.remove("blackout");
+				blackout = null;
+			}
 			pmore = null;
 		},
 		inputStart: function(options) {
-			console.log("input start", options);
+			statusBar.innerHTML = "";
+			statusBar.appendChild(drawOptions(options));
+			statusBar.classList.remove("hidden");
 		},
 		inputEnd: function() {
-			console.log("input end");
+			statusBar.classList.add("hidden");
 		},
 		inputSelect: function(i) {
-			console.log("input select", i);
+			var selected = statusBar.querySelector(".selected");
+			if (selected) {
+				selected.classList.remove("selected");
+			}
+			statusBar.children[i].classList.add("selected");
 		}
 	};
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-	var o = grabFrames();
-	if (!o.frames.length) {
+	var result = grabFrames();
+	if (!result.length) {
 		return;
 	}
 	if (!confirm("要執行動畫嗎？")) {
 		return;
 	}
-	pmore = Pmore(o.result, Viewer(o.frames));
+	pmore = Pmore(result, Viewer());
 	pmore.start();
 });
