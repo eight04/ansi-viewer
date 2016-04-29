@@ -13,7 +13,8 @@ var keyMap = {
 	ArrowDown: "@d",
 	Backspace: "@b",
 	Insert: "@I",
-	Delete: "@D"
+	Delete: "@D",
+	Enter: "\n"
 };
 
 var pmore;
@@ -41,7 +42,11 @@ document.addEventListener("keydown", function(e) {
 		pmore.trigger(e.key);
 	} else if (keyMap[e.key]) {
 		pmore.trigger(keyMap[e.key]);
+	} else {
+		return;
 	}
+	
+	e.preventDefault();
 });
 
 function grabFrames() {
@@ -65,14 +70,16 @@ function grabFrames() {
 
 function Viewer(frames) {
 	return {
-		scrollTo: function(i) {
-			frames[i].nextSibling.scrollIntoView();
+		scrollTo: function(frame) {
+			console.log("frame", frame);
+			document.querySelectorAll(".line")[frame.line + 1].scrollIntoView();
 		},
 		scrollToLine: function(i) {
+			console.log("line", i);
 			document.querySelectorAll(".line")[i].scrollToView();
 		},
 		getPageSize: function() {
-			return 24;
+			return 23;
 		},
 		pause: function() {
 			console.log("pause");
@@ -82,6 +89,10 @@ function Viewer(frames) {
 		},
 		forceEnd: function() {
 			console.log("force end");
+		},
+		end: function() {
+			console.log("end");
+			pmore = null;
 		},
 		inputStart: function(options) {
 			console.log("input start", options);
