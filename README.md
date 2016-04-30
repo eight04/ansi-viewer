@@ -6,12 +6,11 @@ A Firefox addon which let you view .ans file in the browser.
 Features
 --------
 
-* Support big5-uao.
-* ANSI Color.
-* Half CJK coloring.
-* Draw header.
-* Invert color with Alt+L. (Use CSS filter)
-* Flashing text.
+* Support big5-uao by using [uao-js](https://github.com/eight04/uao-js).
+* Support ANSI color by using [bbs-reader](https://github.com/eight04/bbs-reader).
+* Support pmore animation by using [pmore-js](https://github.com/eight04/pmore-js).
+* Invert color with Alt+L. (use CSS filter)
+* Blinking text.
 
 Screenshots
 -----------
