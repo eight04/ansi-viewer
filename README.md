@@ -27,6 +27,12 @@ Screenshots
 Changelog
 ---------
 
+* 1.1.0 (Apr 30, 2016)
+
+	- Move to bbs-reader.
+	- Work with pmore-js!
+	- Drop mousetrap
+
 * 1.0.0 (Apr 28, 2016)
 
 	- Move to uao-js.
