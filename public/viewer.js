@@ -134,7 +134,7 @@ function Viewer() {
 			if (frame.blackout) {
 				frame.blackout.classList.add("blackout");
 				blackout = frame.blackout;
-			};
+			}
 		},
 		scrollToLine: function(i) {
 			lines[i].scrollToView();
