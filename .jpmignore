@@ -7,10 +7,13 @@
 .jpmignore
 .gitignore
 
-node_modules/mousetrap
-!node_modules/mousetrap/mousetrap.min.js
-
 node_modules/uao-js
 !node_modules/uao-js/table
 !node_modules/uao-js/index.js
 !node_modules/uao-js/package.json
+
+node_modules/pmore
+!node_modules/pmore/dist
+
+node_modules/bbs-reader/example
+node_modules/bbs-reader/README.md
