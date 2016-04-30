@@ -21,7 +21,7 @@
   "scripts": {
     "test": "eslint main/**/*.js public/*.js",
     "prestart": "npm test",
-    "start": "npm run",
+    "start": "jpm run",
     "preversion": "npm test",
     "postversion": "jpm xpi && git push --follow-tags"
   }
