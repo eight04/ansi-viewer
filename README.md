@@ -23,6 +23,11 @@ Screenshots
 
 ![screenshot](http://i.imgur.com/s1uUlLH.png)
 
+Todos
+-----
+
+* Is it possible to use CSS animation to toggle font color transparent?
+
 Changelog
 ---------
 
