@@ -1,7 +1,3 @@
-setInterval(function () {
-	document.body.classList.toggle("flink");
-}, 1000);
-
 var keyMap = {
 	PageUp: "@P",
 	PageDown: "@N",
