@@ -1,7 +1,7 @@
 {
   "title": "ANSI Viewer",
   "name": "ansi-viewer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "View ANSI file in the browser",
   "main": "main/index.js",
   "author": "eight04 <eight04@gmail.com>",
