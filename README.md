@@ -23,13 +23,14 @@ Screenshots
 
 ![screenshot](http://i.imgur.com/s1uUlLH.png)
 
-Todos
------
-
-* Is it possible to use CSS animation to toggle font color transparent?
-
 Changelog
 ---------
+
+* 1.2.0 (Apr 30, 2016)
+
+	- Update bbs-reader to 0.2.1.
+	- Remove 80 characters width limit.
+	- Use CSS animation for blinking text.
 
 * 1.1.0 (Apr 30, 2016)
 
