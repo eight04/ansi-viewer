@@ -26,6 +26,10 @@ Screenshots
 Changelog
 ---------
 
+* 1.2.1 (Jun 24 2016)
+
+	- Update bbs-reader to 0.2.2. Fix a bug with consequent escape code.
+
 * 1.2.0 (Apr 30, 2016)
 
 	- Update bbs-reader to 0.2.1.
