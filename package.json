@@ -14,7 +14,7 @@
     "jetpack"
   ],
   "dependencies": {
-    "bbs-reader": "^0.2.2",
+    "bbs-reader": "^0.2.3",
     "pmore": "^0.1.1",
     "uao-js": "^0.1.1"
   },
