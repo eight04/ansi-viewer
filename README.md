@@ -29,6 +29,7 @@ Changelog
 * 1.2.3 (Sep 6, 2016)
 
 	- Update bbs-reader to 0.2.4. Fix w > 80 bug.
+	- Fix: right border disappears when horizontal scrollbar exists.
 
 * 1.2.2 (Jul 19, 2016)
 
