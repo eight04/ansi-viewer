@@ -1,3 +1,11 @@
+body {
+	margin: 0;
+}
+
+.bbs {
+	padding: 8px;
+}
+
 .invert {
 	filter: invert(100%);
 	background: white;
