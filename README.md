@@ -26,6 +26,10 @@ Screenshots
 Changelog
 ---------
 
+* 1.2.3 (Sep 6, 2016)
+
+	- Update bbs-reader to 0.2.4. Fix w > 80 bug.
+
 * 1.2.2 (Jul 19, 2016)
 
 	- Update bbs-reader to 0.2.3. Fix ANSI color bug and HTML entity bug.
