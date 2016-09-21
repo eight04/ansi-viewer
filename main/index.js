@@ -1,17 +1,21 @@
-var viewer = require("./viewer"),
-    category = require("./category");
-    
+// Load/Unlod modules
+var mods = ["viewer", "category", "context-menu"];
+	
 function main() {
-    viewer.init();
-    category.init();
+	var i;
+	for (i = 0; i < mods.length; i++) {
+		require("./" + mods[i]).init();
+	}
 }
 
 function onUnload() {
-    viewer.uninit();
-    category.uninit();
+	var i;
+	for (i = 0; i < mods.length; i++) {
+		require("./" + mods[i]).uninit();
+	}
 }
 
 module.exports = {
-    main: main,
-    onUnload: onUnload
+	main: main,
+	onUnload: onUnload
 };
