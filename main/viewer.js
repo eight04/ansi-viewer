@@ -7,8 +7,7 @@ var {Class} = require("sdk/core/heritage"),
 		"@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter"
 	),
 	
-	uao = require("uao-js"),
-	bbsReader = require("bbs-reader");
+	ansi2html = require("./ansi2html");
 	
 function createViewer() {
     return Class({
@@ -44,11 +43,7 @@ function createViewer() {
         
         onStopRequest: function(aRequest, aContext, aStatusCode) {
             
-            var result = bbsReader(this.data);
-                
-            result = "<!DOCTPYE><html><head><title>" + (result.title ? result.title : "ANSI Viewer") + "</title><script src='" + module.uri + "/../../node_modules/pmore/dist/pmore.js'></script><link rel='stylesheet' href='" + module.uri + "/../../node_modules/bbs-reader/bbs-reader.css'><link rel='stylesheet' href='" + module.uri + "/../../public/viewer.css'><script src='" + module.uri + "/../../public/viewer.js'></script></head><body><div class='bbs'>" + result.html + "</div><div class='statusbar'></div></body></html>";
-            
-            result = uao.decode(result);
+            var result = ansi2html(this.data);
             
             var converter = new ScriptableUnicodeConverter();
             converter.charset = "UTF-8";
