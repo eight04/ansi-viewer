@@ -26,6 +26,11 @@ Screenshots
 Changelog
 ---------
 
+* 1.3.0 (Sep 21, 2016)
+
+	- Update bbs-reader to 0.3.0. Some style changed.
+	- Add context menu "View as ANSI", which let you view any text file (text/plain) in ANSI mode. ([#2](https://github.com/eight04/ansi-viewer/issues/2))
+
 * 1.2.3 (Sep 6, 2016)
 
 	- Update bbs-reader to 0.2.4. Fix w > 80 bug.
