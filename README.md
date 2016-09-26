@@ -26,6 +26,11 @@ Screenshots
 Changelog
 ---------
 
+* 1.4.0 (Sep 27, 2016)
+
+	- Support multiprocess.
+	- Fix charset problem when using context menu to convert text file.
+
 * 1.3.0 (Sep 21, 2016)
 
 	- Update bbs-reader to 0.3.0. Some style changed.
