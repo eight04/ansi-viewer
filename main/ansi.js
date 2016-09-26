@@ -1,5 +1,6 @@
 var bbsReader = require("bbs-reader"),
-	uao = require("uao-js");
+	uao = require("uao-js"),
+	ppmm = require("resource://gre/modules/Services.jsm").Services.ppmm;
 	
 function ANSIResult(content) {
 	this.result = bbsReader(content);
@@ -46,4 +47,18 @@ ANSIResult.prototype.toBody = function() {
 	return "<div class='bbs'>" + this.result.html + "</div><div class='statusbar'></div>";
 };
 
-module.exports = ANSIResult;
+function ansiService(message) {
+	var ansi = new ANSIResult(message.data);
+	ansi.decodeUAO();
+	return ansi.toHTML();
+}
+
+module.exports = {
+	ANSI: ANSIResult,
+	init: function(){
+		ppmm.addMessageListener("ansi-viewer-ansi-service", ansiService);
+	},
+	uninit: function() {
+		ppmm.removeMessageListener("ansi-viewer-ansi-service", ansiService);
+	}
+};
