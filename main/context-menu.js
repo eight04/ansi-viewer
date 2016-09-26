@@ -1,5 +1,4 @@
-var cm = require("sdk/context-menu"),
-	ANSI = require("./ansi").ANSI;
+var cm = require("sdk/context-menu");
 	
 function init() {
 	cm.Item({
@@ -9,16 +8,14 @@ function init() {
 		}),
 		contentScript: "self.on('click', self.postMessage)",
 		onMessage: function(){
-			var tab = require("sdk/tabs").activeTab,
-				readURI = require("sdk/net/url").readURI;
+			var { activeTab } = require("sdk/tabs"),
+				{ XMLHttpRequest } = require("sdk/net/xhr"),
+				{ ANSI } = require("./ansi");
 				
-			readURI(tab.url, {
-				charset: "latin1"
-			}).then(function(content){
+			function convertANSI(content) {
 				var ansi = new ANSI(content);
 				ansi.decodeUAO();
-				
-				tab.attach({
+				activeTab.attach({
 					contentScriptFile: "./injector.js",
 					contentScriptOptions: {
 						title: ansi.result.title,
@@ -27,7 +24,18 @@ function init() {
 						body: ansi.toBody()
 					}
 				});
-			});
+			}
+				
+			// Do we have better way to get binary string from URI?
+			var xhr = new XMLHttpRequest();
+			xhr.responseType = "arraybuffer";
+			xhr.onload = function() {
+				var arr = new Uint8Array(xhr.response),
+					str = String.fromCharCode.apply(String, arr);
+				convertANSI(str);
+			};
+			xhr.open("get", activeTab.url);
+			xhr.send();				
 		}
 	});
 }
