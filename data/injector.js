@@ -20,6 +20,7 @@ for (i = 0; i < self.options.scripts.length; i++) {
 	script = document.createElement("script");
 	script.src = self.options.scripts[i];
 	script.async = false;
+	script.charset = "utf-8";
 	ct.appendChild(script);
 }
 
