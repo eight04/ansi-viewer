@@ -1,5 +1,5 @@
 var cm = require("sdk/context-menu"),
-	ANSI = require("./ansi");
+	ANSI = require("./ansi").ANSI;
 	
 function init() {
 	cm.Item({
