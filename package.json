@@ -19,7 +19,7 @@
     "uao-js": "^0.1.1"
   },
   "scripts": {
-    "test": "eslint main/**/*.js public/*.js",
+    "test": "eslint **/*.js",
     "prestart": "npm test",
     "start": "jpm run -b \"C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe\"",
     "preversion": "npm test",
