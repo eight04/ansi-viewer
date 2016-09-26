@@ -21,7 +21,7 @@
   "scripts": {
     "test": "eslint main/**/*.js public/*.js",
     "prestart": "npm test",
-    "start": "jpm run",
+    "start": "jpm run -b \"C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe\"",
     "preversion": "npm test",
     "postversion": "jpm xpi && git push --follow-tags"
   }
