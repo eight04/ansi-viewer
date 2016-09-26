@@ -1,5 +1,4 @@
-var cm = require("sdk/context-menu"),
-	ansi2html = require("./ansi2html");
+var cm = require("sdk/context-menu");
 	
 function init() {
 	cm.Item({
@@ -9,20 +8,34 @@ function init() {
 		}),
 		contentScript: "self.on('click', self.postMessage)",
 		onMessage: function(){
-			var tab = require("sdk/tabs").activeTab,
-				readURI = require("sdk/net/url").readURI;
+			var { activeTab } = require("sdk/tabs"),
+				{ XMLHttpRequest } = require("sdk/net/xhr"),
+				{ ANSI } = require("./ansi");
 				
-			readURI(tab.url, {
-				charset: "latin1"
-			}).then(function(content){
-				var html = ansi2html(content);
-				tab.attach({
-					contentScript: "document.documentElement.innerHTML = self.options.html",
+			function convertANSI(content) {
+				var ansi = new ANSI(content);
+				ansi.decodeUAO();
+				activeTab.attach({
+					contentScriptFile: "./injector.js",
 					contentScriptOptions: {
-						html: html.match(/<html>([\s\S]*)<\/html>/)[1]
+						title: ansi.result.title,
+						styles: ANSI.styles,
+						scripts: ANSI.scripts,
+						body: ansi.toBody()
 					}
 				});
-			});
+			}
+				
+			// Do we have better way to get binary string from URI?
+			var xhr = new XMLHttpRequest();
+			xhr.responseType = "arraybuffer";
+			xhr.onload = function() {
+				var arr = new Uint8Array(xhr.response),
+					str = String.fromCharCode.apply(String, arr);
+				convertANSI(str);
+			};
+			xhr.open("get", activeTab.url);
+			xhr.send();				
 		}
 	});
 }

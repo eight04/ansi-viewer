@@ -7,7 +7,7 @@ var {Class} = require("sdk/core/heritage"),
 		"@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter"
 	),
 	
-	ansi2html = require("./ansi2html");
+	cpmm = require("resource://gre/modules/Services.jsm").Services.cpmm;
 	
 function createViewer() {
     return Class({
@@ -43,7 +43,7 @@ function createViewer() {
         
         onStopRequest: function(aRequest, aContext, aStatusCode) {
             
-            var result = ansi2html(this.data);
+            var result = cpmm.sendSyncMessage("ansi-viewer-ansi-service", this.data)[0];
             
             var converter = new ScriptableUnicodeConverter();
             converter.charset = "UTF-8";
@@ -59,7 +59,7 @@ function createViewer() {
         }
     });
 }
-	
+
 function init() {
     Service({
         contract: "@mozilla.org/streamconv;1?from=text/ansi&to=*/*",

@@ -1,18 +1,20 @@
 // Load/Unlod modules
-var mods = ["viewer", "category", "context-menu"];
-	
+var ppmm = require("resource://gre/modules/Services.jsm").Services.ppmm;
+
+ppmm.loadProcessScript(module.uri + "/../e10s-loader.js", true);
+
 function main() {
-	var i;
-	for (i = 0; i < mods.length; i++) {
-		require("./" + mods[i]).init();
-	}
+	ppmm.broadcastAsyncMessage("ansi-viewer-load");
+	require("./context-menu").init();
+	require("./ansi").init();
 }
 
 function onUnload() {
-	var i;
-	for (i = 0; i < mods.length; i++) {
-		require("./" + mods[i]).uninit();
-	}
+	ppmm.removeDelayedProcessScript(module.uri + "/../e10s-loader.js");
+	
+	ppmm.broadcastAsyncMessage("ansi-viewer-unload");
+	require("./context-menu").uninit();
+	require("./ansi").uninit();
 }
 
 module.exports = {

@@ -174,7 +174,7 @@ function Viewer() {
 	};
 }
 
-document.addEventListener("DOMContentLoaded", function(){
+function init() {
 	var result = grabFrames();
 	if (!result.length) {
 		return;
@@ -184,4 +184,10 @@ document.addEventListener("DOMContentLoaded", function(){
 	}
 	pmore = Pmore(result, Viewer());
 	pmore.start();
-});
+}
+
+if (document.readyState == "loading") {
+	document.addEventListener("DOMContentLoaded", init);
+} else {
+	init();
+}
