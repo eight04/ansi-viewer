@@ -7,7 +7,7 @@ var {Class} = require("sdk/core/heritage"),
 		"@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter"
 	),
 	
-	ansi2html = require("./ansi2html");
+	ANSI = require("./ansi");
 	
 function createViewer() {
     return Class({
@@ -43,7 +43,9 @@ function createViewer() {
         
         onStopRequest: function(aRequest, aContext, aStatusCode) {
             
-            var result = ansi2html(this.data);
+            var ansi = new ANSI(this.data);
+            ansi.decodeUAO();
+            var result = ansi.toHTML();
             
             var converter = new ScriptableUnicodeConverter();
             converter.charset = "UTF-8";
