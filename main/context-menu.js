@@ -1,5 +1,5 @@
 var cm = require("sdk/context-menu"),
-	ansi2html = require("./ansi2html");
+	ANSI = require("./ansi");
 	
 function init() {
 	cm.Item({
@@ -15,11 +15,16 @@ function init() {
 			readURI(tab.url, {
 				charset: "latin1"
 			}).then(function(content){
-				var html = ansi2html(content);
+				var ansi = new ANSI(content);
+				ansi.decodeUAO();
+				
 				tab.attach({
-					contentScript: "document.documentElement.innerHTML = self.options.html",
+					contentScriptFile: "./injector.js",
 					contentScriptOptions: {
-						html: html.match(/<html>([\s\S]*)<\/html>/)[1]
+						title: ansi.result.title,
+						styles: ANSI.styles,
+						scripts: ANSI.scripts,
+						body: ansi.toBody()
 					}
 				});
 			});
