@@ -11,6 +11,66 @@ function snapshotHTML() {
 	window.open(uri, "Ctrl-S to save", `menubar=0,toolbar=0,location=0,personalbar=0,status=0,width=${width},height=${height}`);
 }
 
+function buffer2str(buffer) {
+	var arr = new Uint8Array(buffer),
+		i, s = "";
+		
+	for (i = 0; i < arr.length; i++) {
+		s += String.fromCharCode(arr[i]);
+	}
+	
+	return s;
+}
+
+function viewAsANSI() {
+	document.documentElement.innerHTML = "";
+
+	document.title = "Fetching...";
+	fetch(location.href).then(function(response) {
+		document.title = "Reading...";
+		return response.arrayBuffer();
+	}).then(function(buffer) {
+		document.title = "Converting...";
+		runtime.sendMessage({
+			type: "BINSTR2ANSI",
+			binary: buffer2str(buffer)
+		}).then(inject);
+	});
+}
+
+function injectStyle(url) {
+	return new Promise(function(resolve, reject) {
+		var link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = url;
+		link.onload = resolve;
+		document.head.appendChild(link);
+	});
+}
+
+function injectScript(url) {
+	return new Promise(function(resolve, reject) {
+		var script = document.createElement("script");
+		script.src = url;
+		script.async = false;
+		script.charset = "utf-8";
+		script.onload = resolve;
+		document.head.appendChild(script);
+	});
+}
+
+function inject(options) {
+	document.title = "Injecting...";
+	document.body.innerHTML = options.body;
+	
+	Promise.all(options.styles.map(injectStyle)).then(function(){
+		document.title = options.title;
+		document.body.classList.add("injected");
+	});
+	
+	options.scripts.map(injectScript);
+}
+
 runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	var type = message.type;
 	if (type == "INJECTOR_CHECK") {
@@ -20,44 +80,6 @@ runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	}
 });
 
-fetch(location.href).then(function(response) {
-	return response.arrayBuffer();
-}).then(function(buffer) {
-	var arr = new Uint8Array(buffer),
-		str = String.fromCharCode.apply(String, arr);
-		
-	runtime.sendMessage({
-		type: "BINSTR2ANSI",
-		binary: str
-	}).then(inject);
-});
-
-function inject(options) {
-	document.documentElement.innerHTML = "";
-
-	document.title = options.title;
-
-	document.body.innerHTML = options.body;
-
-	var i,
-		ct = document.createDocumentFragment(),
-		link,
-		script;
-		
-	for (i = 0; i < options.styles.length; i++) {
-		link = document.createElement("link");
-		link.rel = "stylesheet";
-		link.href = options.styles[i];
-		ct.appendChild(link);
-	}
-
-	for (i = 0; i < options.scripts.length; i++) {
-		script = document.createElement("script");
-		script.src = options.scripts[i];
-		script.async = false;
-		script.charset = "utf-8";
-		ct.appendChild(script);
-	}
-
-	document.head.appendChild(ct);
+if (document.contentType == "text/plain") {
+	viewAsANSI();
 }

@@ -79,10 +79,10 @@ var ANSI = function(){
 (function(){
 	var VIEW_AS_ANSI = contextMenus.create({
 			title: "View as ANSI"
-		}),
-		SNAPSHOT = contextMenus.create({
-			title: "Take snapshot"
 		});
+		// SNAPSHOT = contextMenus.create({
+			// title: "Take snapshot"
+		// });
 		
 	function inject(tab) {
 		return tabs.sendMessage(tab.id, {

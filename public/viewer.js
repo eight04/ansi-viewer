@@ -1,5 +1,6 @@
-/* eslint-env browser */
-/* global Pmore */
+/* eslint-env browser, commonjs */
+
+var Pmore = require("pmore");
 
 var keyMap = {
 	PageUp: "@P",

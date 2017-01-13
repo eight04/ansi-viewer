@@ -37,6 +37,9 @@
 			"js": [
 				"content/injector.js"
 			],
+			"css": [
+				"content/injector.css"
+			],
 			"run_at": "document_start"
 		}
 	],
