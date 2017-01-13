@@ -1,0 +1,48 @@
+{
+	"manifest_version": 2,
+	"version": "2.0.0",
+	"name": "ANSI Viewer",
+	
+	"description": "View ANSI file in the browser",
+	
+	"author": "eight",
+	"homepage_url": "https://github.com/eight04/ansi-viewer",
+	
+	"permissions": [
+		"contextMenus",
+		"tabs",
+		"downloads",
+		"*://*/*",
+		"file:///*"
+	],
+	
+	"background": {
+		"scripts": [
+			"background/lib.js",
+			"background/ansi.js",
+			"background/background.js"
+		]
+	},
+	
+	"content_scripts": [
+		{
+			"matches": [
+				"*://*/*.ans",
+				"file:///*.ans",
+				"*://*/*.bbs",
+				"file:///*.bbs",
+				"*://*/*.ansi",
+				"file:///*.ansi"
+			],
+			"js": [
+				"content/injector.js"
+			],
+			"run_at": "document_start"
+		}
+	],
+	
+	"web_accessible_resources": [
+		"public/*.js",
+		"public/*.css"
+	]
+}

@@ -1,3 +1,6 @@
+/* eslint-env browser */
+/* global Pmore */
+
 var keyMap = {
 	PageUp: "@P",
 	PageDown: "@N",
@@ -37,6 +40,7 @@ var pmore;
 document.addEventListener("keydown", function(e) {
 	if (e.key == "l" && e.altKey) {
 		document.body.classList.toggle("invert");
+		e.preventDefault();
 		return;
 	}
 	

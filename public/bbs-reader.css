@@ -1,0 +1,81 @@
+body {
+	font-family: "MingLiu", "AR PL UMing TW", "MS Mincho", "SimSun", monospace;
+	font-size: 24px;
+	line-height: 1;
+	background-color: black;
+}
+
+a:link,
+a:visited {
+	color: inherit;
+}
+
+.flash {
+	animation: 2s step-end infinite bbs-flash
+}
+
+@keyframes bbs-flash {
+	0% {
+		
+	}
+	50% {
+		color: transparent;
+	}
+	100% {
+		color: transparent;
+	}
+}
+
+.bbs {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+	min-width: 40em;
+}
+
+.line {
+	min-height: 1em;
+	white-space: pre;
+}
+
+.line span {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.half-start,
+.half-end {
+	overflow: hidden;
+}
+
+.half-start::before {
+	content: "";
+	margin-left: -0.5em;
+}
+
+.f0 {color:#000}
+.f1 {color:maroon}
+.f2 {color:green}
+.f3 {color:olive}
+.f4 {color:navy}
+.f5 {color:purple}
+.f6 {color:teal}
+.f7 {color:silver}
+
+.f0.l {color:gray}
+.f1.l {color:red}
+.f2.l {color:#0F0}
+.f3.l {color:#FF0}
+.f4.l {color:#00F}
+.f5.l {color:#F0F}
+.f6.l {color:#0FF}
+.f7.l {color:#FFF}
+
+.b0 {background-color:#000}
+.b1 {background-color:maroon}
+.b2 {background-color:green}
+.b3 {background-color:olive}
+.b4 {background-color:navy}
+.b5 {background-color:purple}
+.b6 {background-color:teal}
+.b7 {background-color:silver}

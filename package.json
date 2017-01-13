@@ -3,26 +3,21 @@
   "name": "ansi-viewer",
   "version": "1.4.0",
   "description": "View ANSI file in the browser",
-  "main": "main/index.js",
   "author": "eight04 <eight04@gmail.com>",
-  "engines": {
-    "firefox": ">=38.0a1",
-    "fennec": ">=38.0a1"
-  },
   "license": "MIT",
-  "keywords": [
-    "jetpack"
-  ],
   "dependencies": {
     "bbs-reader": "^0.3.0",
     "pmore": "^0.1.1",
     "uao-js": "^0.1.1"
   },
   "scripts": {
-    "test": "eslint **/*.js",
-    "prestart": "npm test",
-    "start": "jpm run -b \"C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe\"",
+    "test": "eslint **/*.js && web-ext lint",
+    "start": "web-ext run -f \"C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe\"",
     "preversion": "npm test",
-    "postversion": "jpm xpi && git push --follow-tags"
+    "postversion": "web-ext build && git push --follow-tags",
+    "build-lib": "browserify -r bbs-reader -r uao-js | n-pipe background/lib.js && browserify -r pmore | n-pipe public/pmore.js && n-copy -s node_modules/bbs-reader -d public bbs-reader.css"
+  },
+  "devDependencies": {
+    "npm-build-tools": "^2.2.5"
   }
 }
