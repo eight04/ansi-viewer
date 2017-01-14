@@ -2,6 +2,8 @@
 
 var {runtime} = browser;
 
+window.injected = true;
+
 function snapshotHTML() {
 	var html = document.documentElement.outerHTML,
 		encodedHTML = encodeURIComponent(html),
@@ -39,7 +41,7 @@ function viewAsANSI() {
 }
 
 function injectStyle(url) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function(resolve) {
 		var link = document.createElement("link");
 		link.rel = "stylesheet";
 		link.href = url;
@@ -49,7 +51,7 @@ function injectStyle(url) {
 }
 
 function injectScript(url) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function(resolve) {
 		var script = document.createElement("script");
 		script.src = url;
 		script.async = false;
@@ -70,15 +72,6 @@ function inject(options) {
 	
 	options.scripts.map(injectScript);
 }
-
-runtime.onMessage.addListener(function(message, sender, sendResponse) {
-	var type = message.type;
-	if (type == "INJECTOR_CHECK") {
-		sendResponse(true);
-	} else if (type == "SNAPSHOT") {
-		snapshotHTML();
-	}
-});
 
 if (document.contentType == "text/plain") {
 	viewAsANSI();

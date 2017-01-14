@@ -1,6 +1,6 @@
 /* eslint-env commonjs, webextensions */
 
-var {runtime, contextMenus, extension, tabs, downloads} = browser,
+var {runtime, contextMenus, extension, tabs, commands} = browser,
 	{getURL} = extension;
 
 var ANSI = function(){
@@ -75,6 +75,46 @@ var ANSI = function(){
 	});
 })();
 
+function inject(tab) {
+	return tabs.sendMessage(tab.id, {
+		type: "PAGE_INFO"
+	}).then(info => {
+		if (info == undefined) {
+			throw new Error("No response");
+		}
+		return info;
+	}).catch(reason => {
+		// recieving end doesn't exist
+		return tabs.executeScript(tab.id, {
+			file: "/content/injector-gaurd.js"
+		}).then(infos => {
+			if (!infos.length) {
+				throw new Error("Injection failed");
+			}
+			return infos[0];
+		});
+	}).then(function(info) {
+		if (info.injected) {
+			return;
+		}
+		
+		if (info.contentType != "text/plain") {
+			throw new Error("Invalid contentType for ANSI: " + info.contentType);
+		}
+		
+		return Promise.all([
+			tabs.insertCSS(tab.id, {
+				file: "/content/injector.css",
+				runAt: "document_start"
+			}),
+			tabs.executeScript(tab.id, {
+				file: "/content/injector.js",
+				runAt: "document_start"
+			})
+		]);
+	});
+}
+
 // context menu
 (function(){
 	var VIEW_AS_ANSI = contextMenus.create({
@@ -84,30 +124,31 @@ var ANSI = function(){
 			// title: "Take snapshot"
 		// });
 		
-	function inject(tab) {
-		return tabs.sendMessage(tab.id, {
-			type: "INJECTOR_CHECK"
-		}).catch(function(err){
-			// pass
-		}).then(function(ret) {
-			if (!ret) {
-				return tabs.executeScript(tab.id, {
-					file: "/content/injector.js",
-					runAt: "document_start"
-				});
-			}
-		});
-	}
-
 	contextMenus.onClicked.addListener(function(info, tab) {
 		var id = info.menuItemId;
 		if (id == VIEW_AS_ANSI) {
 			inject(tab);
-		} else if (id == SNAPSHOT) {
-			inject(tab).then(function() {
-				return tabs.sendMessage(tab.id, {
-					type: "SNAPSHOT"
-				});
+		// } else if (id == SNAPSHOT) {
+			// inject(tab).then(function() {
+				// return tabs.sendMessage(tab.id, {
+					// type: "SNAPSHOT"
+				// });
+			// });
+		}
+	});
+})();
+
+// commands
+(function(){
+	commands.onCommand.addListener(function(cmd) {
+		if (cmd == "view-as-ansi") {
+			tabs.query({
+				active: true,
+				currentWindow: true
+			}).then(function(result) {
+				if (result.length) {
+					inject(result[0]);
+				}
 			});
 		}
 	});

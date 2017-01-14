@@ -11,7 +11,6 @@
 	"permissions": [
 		"contextMenus",
 		"tabs",
-		"downloads",
 		"*://*/*",
 		"file:///*"
 	],
@@ -47,5 +46,14 @@
 	"web_accessible_resources": [
 		"public/*.js",
 		"public/*.css"
-	]
+	],
+	
+	"commands": {
+		"view-as-ansi": {
+			"suggested_key": {
+				"default": "Alt+A"
+			},
+			"description": "View current page as ANSI"
+		}
+	}
 }
