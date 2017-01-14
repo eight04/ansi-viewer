@@ -18,7 +18,7 @@ var ANSI = function(){
 	class ANSI {
 		constructor(content) {
 			this.result = bbsReader(content);
-			this.result.title = this.result.title || "ANSI Viewer";
+			this.result.title = this.result.title;
 		}
 		decodeUAO() {
 			if (this.result.title) {

@@ -25,18 +25,25 @@ function buffer2str(buffer) {
 }
 
 function viewAsANSI() {
-	document.documentElement.innerHTML = "";
+	document.open();
+	document.documentElement.style.background = "black";
 
-	document.title = "Fetching...";
 	fetch(location.href).then(function(response) {
-		document.title = "Reading...";
 		return response.arrayBuffer();
 	}).then(function(buffer) {
-		document.title = "Converting...";
-		runtime.sendMessage({
+		return runtime.sendMessage({
 			type: "BINSTR2ANSI",
 			binary: buffer2str(buffer)
-		}).then(inject);
+		});
+	}).then(function (options) {
+		document.title = options.title || "";
+		document.body.innerHTML = options.body;
+		
+		Promise.all(options.styles.map(injectStyle)).then(function(){
+			document.documentElement.style = "";
+		});
+		
+		options.scripts.map(injectScript);
 	});
 }
 
@@ -59,18 +66,6 @@ function injectScript(url) {
 		script.onload = resolve;
 		document.head.appendChild(script);
 	});
-}
-
-function inject(options) {
-	document.title = "Injecting...";
-	document.body.innerHTML = options.body;
-	
-	Promise.all(options.styles.map(injectStyle)).then(function(){
-		document.title = options.title;
-		document.body.classList.add("injected");
-	});
-	
-	options.scripts.map(injectScript);
 }
 
 function isANSI(path) {
