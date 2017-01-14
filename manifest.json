@@ -26,18 +26,13 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://*/*.ans",
+				"*://*/*",
 				"file:///*.ans",
-				"*://*/*.bbs",
 				"file:///*.bbs",
-				"*://*/*.ansi",
 				"file:///*.ansi"
 			],
 			"js": [
 				"content/injector.js"
-			],
-			"css": [
-				"content/injector.css"
 			],
 			"run_at": "document_start"
 		}

@@ -73,6 +73,10 @@ function inject(options) {
 	options.scripts.map(injectScript);
 }
 
-if (document.contentType == "text/plain") {
+function isANSI(path) {
+	return /\.(ans|bbs|ansi)$/i.test(path);
+}
+
+if (document.contentType == "text/x-ansi" || document.contentType == "text/plain" && isANSI(location.pathname)) {
 	viewAsANSI();
 }
