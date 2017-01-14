@@ -179,16 +179,29 @@ function Viewer() {
 	};
 }
 
-function init() {
-	var result = grabFrames();
-	if (!result.length) {
-		return;
-	}
+function animate(frames) {
 	if (!confirm("要執行動畫嗎？")) {
 		return;
 	}
-	pmore = Pmore(result, Viewer());
+	pmore = Pmore(frames, Viewer());
 	pmore.start();
+	return true;
+}
+
+function init() {
+	var frames = grabFrames();
+	if (frames.length) {
+		animate(frames);
+		return;
+	}
+	window.addEventListener("unload", () => {
+		localStorage.scrollPosition = JSON.stringify([window.scrollX, window.scrollY]);
+	});
+	
+	try {
+		var [x, y] = JSON.parse(localStorage.scrollPosition);
+		window.scrollTo(x, y);
+	} catch (err) {}
 }
 
 if (document.readyState == "loading") {
