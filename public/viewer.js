@@ -182,7 +182,7 @@ function Viewer() {
 function hash(text) {
 	var buffer = new TextEncoder().encode(text);
 	return crypto.subtle.digest("SHA-256", buffer)
-		.then(hash => new Uint8Array(hash)
+		.then(hash => Array.from(new Uint8Array(hash))
 			.map(n => ("0" + n.toString(16))
 				.slice(-2))
 			.join("")
@@ -191,6 +191,8 @@ function hash(text) {
 
 function init() {
 	hash(location.href).then(hashedURL => {
+		hashedURL = hashedURL.slice(0, 7);
+		
 		window.addEventListener("unload", () => {
 			sessionStorage[hashedURL + ".scrollPosition"] = JSON.stringify([window.scrollX, window.scrollY]);
 		});
