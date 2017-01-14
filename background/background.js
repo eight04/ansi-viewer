@@ -83,7 +83,7 @@ function inject(tab) {
 			throw new Error("No response");
 		}
 		return info;
-	}).catch(reason => {
+	}).catch(() => {
 		// recieving end doesn't exist
 		return tabs.executeScript(tab.id, {
 			file: "/content/injector-gaurd.js"

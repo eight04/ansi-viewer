@@ -4,14 +4,14 @@ var {runtime} = browser;
 
 window.injected = true;
 
-function snapshotHTML() {
-	var html = document.documentElement.outerHTML,
-		encodedHTML = encodeURIComponent(html),
-		uri = "data:text/html;charset=utf8," + encodedHTML,
-		{offsetWidth: width, offsetHeight: height} = document.querySelector(".bbs");
+// function snapshotHTML() {
+	// var html = document.documentElement.outerHTML,
+		// encodedHTML = encodeURIComponent(html),
+		// uri = "data:text/html;charset=utf8," + encodedHTML,
+		// {offsetWidth: width, offsetHeight: height} = document.querySelector(".bbs");
 		
-	window.open(uri, "Ctrl-S to save", `menubar=0,toolbar=0,location=0,personalbar=0,status=0,width=${width},height=${height}`);
-}
+	// window.open(uri, "Ctrl-S to save", `menubar=0,toolbar=0,location=0,personalbar=0,status=0,width=${width},height=${height}`);
+// }
 
 function buffer2str(buffer) {
 	var arr = new Uint8Array(buffer),

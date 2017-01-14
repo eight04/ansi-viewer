@@ -1,3 +1,5 @@
+/* eslint-env webextensions, browser */
+
 var {runtime} = browser;
 
 function getPageInfo() {
