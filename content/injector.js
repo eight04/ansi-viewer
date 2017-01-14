@@ -4,15 +4,6 @@ var {runtime} = browser;
 
 window.injected = true;
 
-// function snapshotHTML() {
-	// var html = document.documentElement.outerHTML,
-		// encodedHTML = encodeURIComponent(html),
-		// uri = "data:text/html;charset=utf8," + encodedHTML,
-		// {offsetWidth: width, offsetHeight: height} = document.querySelector(".bbs");
-		
-	// window.open(uri, "Ctrl-S to save", `menubar=0,toolbar=0,location=0,personalbar=0,status=0,width=${width},height=${height}`);
-// }
-
 function buffer2str(buffer) {
 	var arr = new Uint8Array(buffer),
 		i, s = "";
@@ -25,7 +16,6 @@ function buffer2str(buffer) {
 }
 
 function viewAsANSI() {
-	document.open();
 	document.documentElement.style.background = "black";
 
 	fetch(location.href).then(function(response) {
@@ -36,13 +26,13 @@ function viewAsANSI() {
 			binary: buffer2str(buffer)
 		});
 	}).then(function (options) {
-		document.title = options.title || "";
+		if (options.title) {
+			document.title = options.title;
+		}
+		document.body.style.visibility = "hidden";
 		document.body.innerHTML = options.body;
 		
-		Promise.all(options.styles.map(injectStyle)).then(function(){
-			document.documentElement.style = "";
-		});
-		
+		options.styles.map(injectStyle);
 		options.scripts.map(injectScript);
 	});
 }
@@ -71,6 +61,12 @@ function injectScript(url) {
 function isANSI(path) {
 	return /\.(ans|bbs|ansi)$/i.test(path);
 }
+
+runtime.onMessage.addListener(msg => {
+	if (msg.type == "VIEW_AS_ANSI") {
+		viewAsANSI();
+	}
+});
 
 if (document.contentType == "text/x-ansi" || document.contentType == "text/plain" && isANSI(location.pathname)) {
 	viewAsANSI();

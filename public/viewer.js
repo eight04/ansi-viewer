@@ -179,29 +179,39 @@ function Viewer() {
 	};
 }
 
-function animate(frames) {
-	if (!confirm("要執行動畫嗎？")) {
-		return;
-	}
-	pmore = Pmore(frames, Viewer());
-	pmore.start();
-	return true;
+function hash(text) {
+	var buffer = new TextEncoder().encode(text);
+	return crypto.subtle.digest("SHA-256", buffer)
+		.then(hash => new Uint8Array(hash)
+			.map(n => ("0" + n.toString(16))
+				.slice(-2))
+			.join("")
+		);
 }
 
 function init() {
-	var frames = grabFrames();
-	if (frames.length) {
-		animate(frames);
-		return;
-	}
-	window.addEventListener("unload", () => {
-		localStorage.scrollPosition = JSON.stringify([window.scrollX, window.scrollY]);
+	hash(location.href).then(hashedURL => {
+		window.addEventListener("unload", () => {
+			sessionStorage[hashedURL + ".scrollPosition"] = JSON.stringify([window.scrollX, window.scrollY]);
+		});
+		
+		try {
+			var [x, y] = JSON.parse(sessionStorage[hashedURL + ".scrollPosition"]);
+			window.scrollTo(x, y);
+		} catch (err) {
+			console.log(err);
+		}
+		
+		document.body.style = "";
+		document.documentElement.style = "";
+		
+		var frames = grabFrames();
+		if (!frames.length || !confirm("要執行動畫嗎？")) {
+			return;
+		}
+		pmore = Pmore(frames, Viewer());
+		pmore.start();
 	});
-	
-	try {
-		var [x, y] = JSON.parse(localStorage.scrollPosition);
-		window.scrollTo(x, y);
-	} catch (err) {}
 }
 
 if (document.readyState == "loading") {

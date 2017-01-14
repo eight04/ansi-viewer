@@ -102,16 +102,14 @@ function inject(tab) {
 			throw new Error("Invalid contentType for ANSI: " + info.contentType);
 		}
 		
-		return Promise.all([
-			tabs.insertCSS(tab.id, {
-				file: "/content/injector.css",
-				runAt: "document_start"
-			}),
-			tabs.executeScript(tab.id, {
-				file: "/content/injector.js",
-				runAt: "document_start"
-			})
-		]);
+		return tabs.executeScript(tab.id, {
+			file: "/content/injector.js",
+			runAt: "document_start"
+		});
+	}).then(() => {
+		tabs.sendMessage(tab.id, {
+			type: "VIEW_AS_ANSI"
+		});
 	});
 }
 
