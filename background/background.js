@@ -85,6 +85,9 @@ function inject(tab) {
 		return info;
 	}).catch(() => {
 		// recieving end doesn't exist
+		tabs.executeScript(tab.id, {
+			file: "/polyfill/browser-polyfill.js"
+		});
 		return tabs.executeScript(tab.id, {
 			file: "/content/injector-gaurd.js"
 		}).then(infos => {

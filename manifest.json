@@ -17,8 +17,8 @@
 	
 	"background": {
 		"scripts": [
+			"polyfill/browser-polyfill.js",
 			"background/lib.js",
-			"background/ansi.js",
 			"background/background.js"
 		]
 	},
@@ -32,6 +32,7 @@
 				"file:///*.ansi"
 			],
 			"js": [
+				"polyfill/browser-polyfill.js",
 				"content/injector.js"
 			],
 			"run_at": "document_start"

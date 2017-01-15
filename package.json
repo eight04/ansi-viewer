@@ -8,14 +8,16 @@
   "dependencies": {
     "bbs-reader": "^0.3.0",
     "pmore": "^0.1.1",
-    "uao-js": "^0.1.1"
+    "uao-js": "^0.1.1",
+    "webextension-polyfill": "github:mozilla/webextension-polyfill"
   },
   "scripts": {
     "test": "eslint **/*.js && web-ext lint",
     "start": "web-ext run -f \"C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe\"",
     "preversion": "npm test",
     "postversion": "web-ext build && git push --follow-tags",
-    "build-lib": "browserify -r bbs-reader -r uao-js | n-pipe background/lib.js && browserify -r pmore | n-pipe public/pmore.js && n-copy -s node_modules/bbs-reader -d public bbs-reader.css"
+    "build-lib": "browserify -r bbs-reader -r uao-js | n-pipe background/lib.js && browserify -r pmore | n-pipe public/pmore.js && n-copy -s node_modules/bbs-reader -d public bbs-reader.css && npm run build-polyfill",
+	"build-polyfill": "pushd node_modules/webextension-polyfill && npm install && npm run build && popd && n-copy -s node_modules/webextension-polyfill/dist -d polyfill browser-polyfill.js"
   },
   "devDependencies": {
     "npm-build-tools": "^2.2.5"
