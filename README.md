@@ -6,11 +6,14 @@ A Firefox addon which let you view .ans file in the browser.
 Features
 --------
 
-* Support big5-uao by using [uao-js](https://github.com/eight04/uao-js).
-* Support ANSI color by using [bbs-reader](https://github.com/eight04/bbs-reader).
-* Support pmore animation by using [pmore-js](https://github.com/eight04/pmore-js).
-* Invert color with Alt+L. (use CSS filter)
-* Blinking text.
+* View ANSI files in your browser. Simply drag-n-drop them on the browser.
+* Use Big5-UAO as encoding.
+* pmore animation.
+* Invert color with Alt+L.
+* Valid file extensions: .ans, .ansi, .bbs.
+* Or with content-type == "text/x-ansi".
+* Live reload if the file is served from `file:`.
+* Support Firefox and Chrome.
 
 Screenshots
 -----------
@@ -25,6 +28,11 @@ Screenshots
 
 Changelog
 ---------
+
+* 2.0.0 (Jan 17, 2016)
+
+	- Rewrite with Web Extension.
+	- Add live reload feature. Only works on file: protocol.
 
 * 1.4.0 (Sep 27, 2016)
 
