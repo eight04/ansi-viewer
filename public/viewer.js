@@ -186,13 +186,12 @@ function hash(text) {
 			.map(n => ("0" + n.toString(16))
 				.slice(-2))
 			.join("")
+			.slice(0, 7)
 		);
 }
 
 function init() {
 	hash(location.href).then(hashedURL => {
-		hashedURL = hashedURL.slice(0, 7);
-		
 		window.addEventListener("unload", () => {
 			sessionStorage[hashedURL + ".scrollPosition"] = JSON.stringify([window.scrollX, window.scrollY]);
 		});
@@ -201,7 +200,7 @@ function init() {
 			var [x, y] = JSON.parse(sessionStorage[hashedURL + ".scrollPosition"]);
 			window.scrollTo(x, y);
 		} catch (err) {
-			console.log(err);
+			// pass
 		}
 		
 		document.body.style = "";

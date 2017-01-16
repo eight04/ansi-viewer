@@ -1,6 +1,7 @@
 /* eslint-env commonjs, webextensions */
+/* global hash */
 
-var {runtime, contextMenus, extension, tabs, commands} = browser,
+var {runtime, contextMenus, extension, tabs, commands, webRequest} = browser,
 	{getURL} = extension;
 
 var ANSI = function(){
@@ -86,7 +87,7 @@ function inject(tab) {
 	}).catch(() => {
 		// recieving end doesn't exist
 		tabs.executeScript(tab.id, {
-			file: "/polyfill/browser-polyfill.js"
+			file: "/lib/browser-polyfill.js"
 		});
 		return tabs.executeScript(tab.id, {
 			file: "/content/injector-gaurd.js"
@@ -121,20 +122,11 @@ function inject(tab) {
 	var VIEW_AS_ANSI = contextMenus.create({
 			title: "View as ANSI"
 		});
-		// SNAPSHOT = contextMenus.create({
-			// title: "Take snapshot"
-		// });
 		
 	contextMenus.onClicked.addListener(function(info, tab) {
 		var id = info.menuItemId;
 		if (id == VIEW_AS_ANSI) {
 			inject(tab);
-		// } else if (id == SNAPSHOT) {
-			// inject(tab).then(function() {
-				// return tabs.sendMessage(tab.id, {
-					// type: "SNAPSHOT"
-				// });
-			// });
 		}
 	});
 })();
@@ -153,4 +145,24 @@ function inject(tab) {
 			});
 		}
 	});
+})();
+
+// handle x-ansi content type
+(function(){
+	webRequest.onHeadersReceived.addListener(details => {
+		var contentType = details.responseHeaders.filter(h => h.name == "content-type")[0];
+		if (contentType && contentType.value == "text/x-ansi") {
+			contentType.value = "text/plain";
+			details.responseHeaders.push({
+				name: "set-cookie",
+				value: "ansi=true; max-age=1"
+			});
+			return {
+				responseHeaders: details.responseHeaders
+			};
+		}
+	}, {
+		urls: ["*://*/*"],
+		types: ["main_frame"]
+	}, ["blocking", "responseHeaders"]);
 })();

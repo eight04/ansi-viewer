@@ -75,7 +75,7 @@ function injectScript(url) {
 }
 
 function isANSI(path) {
-	return /\.(ans|bbs|ansi)$/i.test(path);
+	return ;
 }
 
 runtime.onMessage.addListener(msg => {
@@ -84,7 +84,22 @@ runtime.onMessage.addListener(msg => {
 	}
 });
 
-if (document.contentType == "text/x-ansi" || document.contentType == "text/plain" && isANSI(location.pathname)) {
+function shouldViewAsANSI() {
+	if (document.contentType == "text/x-ansi") {
+		return true;;
+	}
+	if (document.contentType == "text/plain") {
+		if (/\.(ans|bbs|ansi)$/i.test(location.pathname)) {
+			return true;
+		}
+		if (document.cookie.includes("ansi=true")) {
+			return true;
+		}
+	}
+	return false;
+}
+
+if (shouldViewAsANSI()) {
 	viewAsANSI();
 }
 

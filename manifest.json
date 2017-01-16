@@ -11,13 +11,15 @@
 	"permissions": [
 		"contextMenus",
 		"tabs",
+		"webRequest",
+		"webRequestBlocking",
 		"*://*/*",
 		"file:///*"
 	],
 	
 	"background": {
 		"scripts": [
-			"polyfill/browser-polyfill.js",
+			"lib/browser-polyfill.js",
 			"background/lib.js",
 			"background/background.js"
 		]
@@ -32,7 +34,7 @@
 				"file:///*.ansi"
 			],
 			"js": [
-				"polyfill/browser-polyfill.js",
+				"lib/browser-polyfill.js",
 				"content/injector.js"
 			],
 			"run_at": "document_start"
