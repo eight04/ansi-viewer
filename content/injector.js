@@ -15,42 +15,77 @@ function buffer2str(buffer) {
 	return s;
 }
 
-function documentReady() {
-	return new Promise(resolve => {
-		if (document.readyState != "loading") {
-			resolve();
-			return;
-		}
-		document.addEventListener("DOMContentLoaded", resolve);
-	});
+function hash(text) {
+	var buffer = new TextEncoder().encode(text);
+	return crypto.subtle.digest("SHA-256", buffer)
+		.then(hash => Array.from(new Uint8Array(hash))
+			.map(n => ("0" + n.toString(16))
+				.slice(-2))
+			.join("")
+			.slice(0, 7)
+		);
+}
+
+class ANSILoader {
+	constructor() {
+		this.hash = null;
+	}
+	
+	load() {
+		// fetch dosnt' work on chrome?
+		// Fetch API cannot load file:///... URL scheme must be "http" or "https" for CORS request.
+		return getBinary(location.href)
+			.then(buffer2str)
+			// .catch(() => documentReady().then(() => document.body.textContent))
+			.then(content => hash(content)
+				.then(hashed => ({
+					content: content,
+					currHash: hashed,
+					prevHash: this.hash
+				}))
+			)
+			.then(result => {
+				if (result.currHash == result.prevHash) {
+					return;
+				}
+				this.hash = result.currHash;
+				
+				return runtime.sendMessage({
+					type: "BINSTR2ANSI",
+					binary: result.content
+				}).then(options => {
+					if (!result.prevHash) {
+						if (options.title) {
+							document.title = options.title;
+						}
+						document.body.style.visibility = "hidden";
+						document.body.innerHTML = options.body;
+						
+						options.styles.map(injectStyle);
+						options.scripts.map(injectScript);
+					} else {
+						document.body.innerHTML = options.body;
+					}
+				});
+			});
+	}
 }
 
 function viewAsANSI() {
 	document.documentElement.style.background = "black";
 	
-	// fetch dosnt' work on chrome?
-	// Fetch API cannot load file:///... URL scheme must be "http" or "https" for CORS request.
-	// fetch(location.href)
-		// .then(r => r.arrayBuffer().then(buffer2str))
-	getBinary(location.href)
-		.then(buffer2str)
-		.catch(() => documentReady().then(() => document.body.textContent))
-		.then(function(content) {
-			return runtime.sendMessage({
-				type: "BINSTR2ANSI",
-				binary: content
-			});
-		})
-		.then(function (options) {
-			if (options.title) {
-				document.title = options.title;
-			}
-			document.body.style.visibility = "hidden";
-			document.body.innerHTML = options.body;
-			
-			options.styles.map(injectStyle);
-			options.scripts.map(injectScript);
-		});
+	var ansiLoader = new ANSILoader;
+	if (location.protocol == "file:") {
+		(function loop(){
+			ansiLoader
+				.load()
+				.then(() => {
+					setTimeout(loop, 2000);
+				});
+		})();
+	} else {
+		ansiLoader.load();
+	}
 }
 
 function injectStyle(url) {
