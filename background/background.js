@@ -1,5 +1,4 @@
 /* eslint-env commonjs, webextensions */
-/* global hash */
 
 var {runtime, contextMenus, extension, tabs, commands, webRequest} = browser,
 	{getURL} = extension;

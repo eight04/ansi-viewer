@@ -74,10 +74,6 @@ function injectScript(url) {
 	});
 }
 
-function isANSI(path) {
-	return ;
-}
-
 runtime.onMessage.addListener(msg => {
 	if (msg.type == "VIEW_AS_ANSI") {
 		viewAsANSI();
@@ -86,7 +82,7 @@ runtime.onMessage.addListener(msg => {
 
 function shouldViewAsANSI() {
 	if (document.contentType == "text/x-ansi") {
-		return true;;
+		return true;
 	}
 	if (document.contentType == "text/plain") {
 		if (/\.(ans|bbs|ansi)$/i.test(location.pathname)) {
