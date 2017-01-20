@@ -1,6 +1,7 @@
 {
 	"env": {
-		"es6": true
+		"es6": true,
+		"node": true
 	},
 	"rules": {
 		"no-use-before-define": [2, "nofunc"],

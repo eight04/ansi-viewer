@@ -14,19 +14,30 @@ var ANSI = function(){
 			getURL("public/bbs-reader.css"),
 			getURL("public/viewer.css")
 		];
+		
+	function createTable() {
+		return fetch(getURL("background/b2u.json"))
+			.then(r => r.json());
+	}
 	
 	class ANSI {
 		constructor(content) {
 			this.result = bbsReader(content);
 			this.result.title = this.result.title;
 		}
+		// async
 		decodeUAO() {
-			if (this.result.title) {
-				this.result.title = uao.decode(this.result.title);
-			}
-			if (this.result.html) {
-				this.result.html = uao.decode(this.result.html);
-			}
+			return uao
+				.decode(this.result.title || "", createTable)
+				.then(title => {
+					this.result.title = title
+				})
+				.then(() => {
+					return uao.decode(this.result.html, createTable);
+				})
+				.then(html => {
+					this.result.html = html
+				});
 		}
 		toHTML() {
 			var html = "<!DOCTPYE><html><head><title>" + this.result.title + "</title>",
@@ -59,18 +70,20 @@ var ANSI = function(){
 (function() {
 	function convertAnsi(content) {
 		var ansi = new ANSI(content);
-		ansi.decodeUAO();
-		return {
+		return ansi.decodeUAO().then(() => ({
 			title: ansi.result.title,
 			styles: ANSI.styles,
 			scripts: ANSI.scripts,
 			body: ansi.toBody()
-		};
+		}));
 	}
 	
 	runtime.onMessage.addListener(function(request, sender, sendResponse){
 		if (request.type == "BINSTR2ANSI") {
-			sendResponse(convertAnsi(request.binary));
+			convertAnsi(request.binary).then(result => {
+				sendResponse(result);
+			});
+			return true;
 		}
 	});
 })();
