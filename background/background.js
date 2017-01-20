@@ -1,4 +1,4 @@
-/* eslint-env commonjs, webextensions */
+/* eslint-env commonjs, webextensions, browser */
 
 var {runtime, contextMenus, extension, tabs, commands, webRequest} = browser,
 	{getURL} = extension;
@@ -30,13 +30,13 @@ var ANSI = function(){
 			return uao
 				.decode(this.result.title || "", createTable)
 				.then(title => {
-					this.result.title = title
+					this.result.title = title;
 				})
 				.then(() => {
 					return uao.decode(this.result.html, createTable);
 				})
 				.then(html => {
-					this.result.html = html
+					this.result.html = html;
 				});
 		}
 		toHTML() {
