@@ -29,6 +29,10 @@ Screenshots
 Changelog
 ---------
 
+* 2.0.1 (Jan 21, 2016)
+
+	- Update uao-js to 1.0.1. Use our table loader to reduce file size.
+
 * 2.0.0 (Jan 17, 2016)
 
 	- Rewrite with Web Extension.
