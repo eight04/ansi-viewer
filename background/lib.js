@@ -150,18 +150,15 @@ function makeHead(lLabel, lText, rLabel, rText) {
 
 // extract text to color
 function extractColor(text, i, color) {
-    var re = /\033\[([\d;]*)m/g;
-    re.lastIndex = i;
     var matches = [],
         match;
-    do {
-        match = re.exec(text);
-        if (!match || match.index != i) {
-            break;
-        }
+		
+	text = text.slice(i);
+    while ((match = text.match(/^\x1b\[([\d;]*)m/))) {
         matches.push(match);
-        i = re.lastIndex;
-    } while (text[re.lastIndex] == "\x1b");
+        text = text.slice(match[0].length);
+		i += match[0].length;
+    }
     
     if (!matches.length) {
         return null;
@@ -174,7 +171,7 @@ function extractColor(text, i, color) {
     tokens = Array.prototype.concat.apply([], tokens);
     
     var span = color.copy();
-    span.i = re.lastIndex;
+    span.i = i;
     
     var code;
     
@@ -273,6 +270,9 @@ function bbsReader(data) {
             } else {
                 cjk = false;
                 result += span.toString();
+				if (span2.i <= i) {
+					throw new Error("bbs-reader crashed! infinite loop");
+				}
                 i = span2.i - 1;
                 span = span2;
             }
