@@ -6,7 +6,7 @@
   "author": "eight04 <eight04@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "bbs-reader": "^0.3.0",
+    "bbs-reader": "^0.3.1",
     "pmore": "^0.1.1",
     "uao-js": "^1.0.1",
     "webextension-polyfill": "github:mozilla/webextension-polyfill"
@@ -16,7 +16,7 @@
     "start": "web-ext run -f \"C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe\"",
     "preversion": "npm test",
     "version": "sync-version manifest.json && git add .",
-	"build": "web-ext build --ignore-files **/*.log",
+    "build": "web-ext build --ignore-files **/*.log",
     "postversion": "npm run build && git push --follow-tags",
     "build-lib": "browserify -r bbs-reader -r uao-js --exclude **/uao-js/table/** | n-pipe background/lib.js && browserify -r pmore | n-pipe public/pmore.js && n-copy -s node_modules/bbs-reader -d public bbs-reader.css && n-copy -s node_modules/uao-js/table -d background b2u.json",
     "build-polyfill": "pushd node_modules/webextension-polyfill && npm install && npm run build && popd && n-copy -s node_modules/webextension-polyfill/dist -d polyfill browser-polyfill.js"
