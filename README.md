@@ -29,6 +29,10 @@ Screenshots
 Changelog
 ---------
 
+* 2.0.2 (Feb 21, 2017)
+
+	- Update bbs-reader to 0.3.1. Fix infinite loop bug.
+
 * 2.0.1 (Jan 21, 2016)
 
 	- Update uao-js to 1.0.1. Use our table loader to reduce file size.
