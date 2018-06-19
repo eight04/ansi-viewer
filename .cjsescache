@@ -1,9 +1,12 @@
 {
+  "node_modules/bbs-reader/bbs-reader.js": "default",
   "node_modules/uao-js/index.js": "named",
   "node_modules/uao-js/table/b2u.json": "default",
   "node_modules/uao-js/table/u2b.json": "default",
   "node_modules/webextension-polyfill/dist/browser-polyfill.js": "default",
   "src/background.js": "default",
-  "src/content-worker-core.js": "default",
-  "src/content.js": "default"
+  "src/content-worker.js": "default",
+  "src/content.js": "default",
+  "src/pmore.js": "named",
+  "src/scroll-pos-saver.js": "named"
 }
