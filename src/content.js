@@ -21,7 +21,7 @@ function createWorker() {
     return new Promise(resolve => {
       worker.port.postMessage(buffer);
       worker.port.addEventListener("message", e => {
-        resolve(e.data)
+        resolve(e.data);
       }, {once: true});
     });
   }

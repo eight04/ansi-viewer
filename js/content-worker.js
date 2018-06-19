@@ -343,7 +343,7 @@ onconnect = e => {
   const port = e.ports[0];
   port.onmessage = e => {
     const binary = e.data;
-    const {title, html} = bbsReader(binary);
+    let {title, html} = bbsReader(binary);
     title = _export_decodeSync_(title);
     html = _export_decodeSync_(html);
     port.postMessage({title, html});

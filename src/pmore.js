@@ -1,3 +1,5 @@
+import Pmore from "pmore";
+
 function redirectKeys(pmore) {
   const keyMap = {
     PageUp: "@P",
@@ -125,7 +127,6 @@ function createViewer() {
 				blackout.classList.remove("blackout");
 				blackout = null;
 			}
-			pmore = null;
 		},
 		inputStart: function(options) {
 			statusBar.innerHTML = "";

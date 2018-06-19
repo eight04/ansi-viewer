@@ -32,7 +32,7 @@ browser.webRequest.onHeadersReceived.addListener(details => {
 }, {types: ["main_frame"]}, ["blocking", "responseHeaders"]);
 
 function viewAsANSI(tabId, url) {
-  tabs.get(tabId)
+  browser.tabs.get(tabId)
     .then(tab => {
       console.log(tab, url);
     });

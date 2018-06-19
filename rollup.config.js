@@ -1,4 +1,3 @@
-import path from "path";
 import resolve from "rollup-plugin-node-resolve";
 import cjs from "rollup-plugin-cjs-es";
 import json from "rollup-plugin-json";

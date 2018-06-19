@@ -5,7 +5,7 @@ onconnect = e => {
   const port = e.ports[0];
   port.onmessage = e => {
     const binary = e.data;
-    const {title, html} = bbsReader(binary);
+    let {title, html} = bbsReader(binary);
     title = uaoDecode(title);
     html = uaoDecode(html);
     port.postMessage({title, html});

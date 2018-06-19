@@ -1,7 +1,7 @@
 {
 	"env": {
 		"es6": true,
-		"node": true
+		"browser": true
 	},
 	"rules": {
 		"no-use-before-define": [2, "nofunc"],
@@ -9,5 +9,8 @@
 	},
 	"extends": [
 		"eslint:recommended"
-	]
+	],
+  "parserOptions": {
+    "sourceType": "module"
+  }
 }
