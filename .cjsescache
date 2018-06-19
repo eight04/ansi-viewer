@@ -1,0 +1,6 @@
+{
+  "node_modules/uao-js/index.js": "named",
+  "node_modules/uao-js/table/b2u.json": "default",
+  "node_modules/uao-js/table/u2b.json": "default",
+  "src/content-worker-core.js": "default"
+}

@@ -12,42 +12,43 @@
 		"contextMenus",
 		"tabs",
 		"webRequest",
-		"webRequestBlocking",
-		"*://*/*",
-		"file:///*"
+		"webRequestBlocking"
 	],
 	
 	"background": {
 		"scripts": [
-			"lib/browser-polyfill.js",
-			"background/lib.js",
-			"background/background.js"
+			"js/background.js"
 		]
 	},
 	
 	"content_scripts": [
 		{
 			"matches": [
-				"*://*/*",
-				"file:///*.ans",
-				"file:///*.bbs",
-				"file:///*.ansi"
+				"*://*/*"
 			],
 			"js": [
-				"lib/browser-polyfill.js",
-				"content/injector.js"
+				"js/content-detect.js"
 			],
 			"run_at": "document_start"
-		}
+		},
+    {
+      "matches": [
+        "file:///*"
+      ],
+      "include_globs": ["*.ans", "*.bbs", "*.ansi"],
+      "js": [
+        "js/content.js"
+      ]
+    }
 	],
 	
 	"web_accessible_resources": [
-		"public/*.js",
-		"public/*.css"
+		"js/content-worker.js",
+		"css/*"
 	],
 	
 	"commands": {
-		"view-as-ansi": {
+		"VIEW_AS_ANSI": {
 			"suggested_key": {
 				"default": "Alt+A"
 			},
