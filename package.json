@@ -12,8 +12,8 @@
     "webextension-polyfill": "^0.2.1"
   },
   "scripts": {
-    "test": "eslint **/*.js && web-ext lint",
-    "start": "web-ext run -f \"C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe\"",
+    "test": "eslint **/*.js --cache && web-ext lint",
+    "start": "web-ext run",
     "preversion": "npm test",
     "version": "sync-version manifest.json && git add .",
     "build": "web-ext build --ignore-files **/*.log",
@@ -22,7 +22,9 @@
     "build-polyfill": "pushd node_modules/webextension-polyfill && npm install && npm run build && popd && n-copy -s node_modules/webextension-polyfill/dist -d polyfill browser-polyfill.js"
   },
   "devDependencies": {
-    "npm-build-tools": "^2.2.5",
-    "sync-version": "^1.0.1"
+    "eslint": "^4.19.1",
+    "shx": "^0.3.0",
+    "sync-version": "^1.0.1",
+    "web-ext": "^2.7.0"
   }
 }
