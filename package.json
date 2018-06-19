@@ -9,7 +9,7 @@
     "bbs-reader": "^0.3.1",
     "pmore": "^0.1.1",
     "uao-js": "^1.0.1",
-    "webextension-polyfill": "github:mozilla/webextension-polyfill"
+    "webextension-polyfill": "^0.2.1"
   },
   "scripts": {
     "test": "eslint **/*.js && web-ext lint",
@@ -23,6 +23,6 @@
   },
   "devDependencies": {
     "npm-build-tools": "^2.2.5",
-    "sync-version": "^1.0.0"
+    "sync-version": "^1.0.1"
   }
 }
