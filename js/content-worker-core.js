@@ -1,18 +1,5 @@
-var _require__$table$u2b_json_ = {
-	"my/name": "u2b"
-};
-
-var u2b = ({
-	default: _require__$table$u2b_json_
-});
-
-var _require__$table$b2u_json_ = {
-	"my/name": "b2u"
-};
-
-var b2u = ({
-	default: _require__$table$b2u_json_
-});
+import _require__$table$u2b_json_ from './u2b.js';
+import _require__$table$b2u_json_ from './b2u.js';
 
 function decode(table, bytes) {
 	var i = 0, result = "";

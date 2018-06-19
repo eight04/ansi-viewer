@@ -1,5 +1,5 @@
 import {decodeSync as uaoDecode} from "uao-js";
-// import bbsReader from "bbs-reader";
+import bbsReader from "bbs-reader";
 
 onconnect = e => {
   const port = e.ports[0];

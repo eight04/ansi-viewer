@@ -12,7 +12,8 @@
 		"contextMenus",
 		"tabs",
 		"webRequest",
-		"webRequestBlocking"
+		"webRequestBlocking",
+    "<all_urls>"
 	],
 	
 	"background": {
@@ -22,15 +23,6 @@
 	},
 	
 	"content_scripts": [
-		{
-			"matches": [
-				"*://*/*"
-			],
-			"js": [
-				"js/content-detect.js"
-			],
-			"run_at": "document_start"
-		},
     {
       "matches": [
         "file:///*"
