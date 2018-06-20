@@ -13,16 +13,29 @@ function getBinary(file){
 }
 
 function createWorker() {
-  const worker = new SharedWorker("./content-worker.js");
-  worker.port.start();
-  return {compileANSI};
+  const worker = new Worker(browser.runtime.getURL("/js/content-worker.js"));
+  let error;
+  worker.onerror = err => error = err;
+  return {compileANSI, stop};
+  
+  function stop() {
+    worker.terminate();
+  }
   
   function compileANSI(buffer) {
-    return new Promise(resolve => {
-      worker.port.postMessage(buffer);
-      worker.port.addEventListener("message", e => {
-        resolve(e.data);
+    return new Promise((resolve, reject) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      worker.addEventListener("message", e => {
+        if (e.data.error) {
+          reject(e.data.data);
+          return;
+        }
+        resolve(e.data.data);
       }, {once: true});
+      worker.postMessage(buffer, [buffer]);
     });
   }
 }
@@ -39,7 +52,9 @@ function init() {
   
   Promise.all([pendingRoot, pendingANSI])
     .then(([, result]) => {
-      document.title = result.title;
+      if (result.title) {
+        document.title = result.title;
+      }
       document.querySelector(".bbs").innerHTML = result.html;
       document.addEventListener("keydown", e => {
         // invert color
@@ -60,8 +75,11 @@ function init() {
         return pendingHash.then(hash => {
           setTimeout(drawANSILoop, LOOP_TIMEOUT, hash);
         });
+      } else {
+        worker.stop();
       }
-    });
+    })
+    .catch(console.error);
   
   function drawRoot() {
     if (document.readyState != "loading") {

@@ -896,6 +896,7 @@ const _module_ = {exports: _exports_};
   }
 });
 var browser$1 = _module_.exports;
+//# sourceMappingURL=browser-polyfill.js.map
 
 browser$1.webRequest.onHeadersReceived.addListener(details => {
   if (details.method == "POST") {
@@ -909,6 +910,8 @@ browser$1.webRequest.onHeadersReceived.addListener(details => {
   if (
     /\.(ans|bbs|ansi)$/.test(url.pathname) && 
     (
+      // this doesn't work
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1341341
       url.protocol == "file:" ||
       !header ||
       header.value == "text/plain" ||
@@ -920,17 +923,55 @@ browser$1.webRequest.onHeadersReceived.addListener(details => {
       viewAsANSI(details.tabId, details.url);
     }
     if (header) {
-      header.value = "text/x-ansi";
+      header.value = "text/plain";
     } else {
-      details.responseHeaders.push({name: "Content-Type", value: "text/x-ansi"});
+      details.responseHeaders.push({name: "Content-Type", value: "text/plain"});
     }
     return {responseHeaders: details.responseHeaders};
   }
-}, {types: ["main_frame"]}, ["blocking", "responseHeaders"]);
+}, {
+  urls: ["<all_urls>"],
+  types: ["main_frame"]
+}, ["blocking", "responseHeaders"]);
 
+const waitForUpdate = new Set;
 function viewAsANSI(tabId, url) {
-  browser$1.tabs.get(tabId)
-    .then(tab => {
-      console.log(tab, url);
+  init();
+  
+  function init() {
+    if (waitForUpdate.has(tabId)) {
+      return;
+    }
+    browser$1.tabs.onUpdated.addListener(onUpdated);
+    browser$1.tabs.onRemoved.addListener(onRemoved);
+    waitForUpdate.add(tabId);
+  }
+  
+  function uninit() {
+    browser$1.tabs.onUpdated.removeListener(onUpdated);
+    browser$1.tabs.onRemoved.removeListener(onRemoved);
+    waitForUpdate.delete(tabId);
+  }
+  
+  function onUpdated(_tabId, changeInfo, tab) {
+    if (_tabId !== tabId || tab.url !== url) {
+      return;
+    }
+    browser$1.tabs.executeScript(tabId, {
+      file: "/js/content.js"
     });
+    browser$1.tabs.insertCSS(tabId, {
+      file: "/css/bbs-reader.css"
+    });
+    browser$1.tabs.insertCSS(tabId, {
+      file: "/css/viewer.css"
+    });
+    uninit();
+  }
+  
+  function onRemoved(_tabId) {
+    if (_tabId === tabId) {
+      uninit();
+    }
+  }
 }

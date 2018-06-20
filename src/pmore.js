@@ -1,6 +1,6 @@
 import Pmore from "pmore";
 
-function redirectKeys(pmore) {
+function createKeyRedirecter(pmore) {
   const keyMap = {
     PageUp: "@P",
     PageDown: "@N",
@@ -15,14 +15,17 @@ function redirectKeys(pmore) {
     Delete: "@D",
     Enter: "\n"
   };
+  return {start, stop};
   
-  document.addEventListener("keydown", function(e) {
-    // restart
-    if (e.key == "p" && e.altKey) {
-      pmore.start();
-      return;
-    }
-    
+  function start() {
+    document.addEventListener("keydown", handleKeyDown);
+  }
+  
+  function stop() {
+    document.removeEventListener("keydown", handleKeyDown);
+  }
+  
+  function handleKeyDown(e) {
     if (e.altKey || e.ctrlKey) {
       return;
     }
@@ -36,10 +39,10 @@ function redirectKeys(pmore) {
     }
     
     e.preventDefault();
-  });  
+  }
 }
 
-function createViewer() {
+function createViewer(onend) {
 	var statusBar = document.querySelector(".statusbar"),
 		lines = document.querySelectorAll(".line"),
 		blackout;
@@ -127,6 +130,9 @@ function createViewer() {
 				blackout.classList.remove("blackout");
 				blackout = null;
 			}
+      if (onend) {
+        onend();
+      }
 		},
 		inputStart: function(options) {
 			statusBar.innerHTML = "";
@@ -182,8 +188,13 @@ export function createPmore() {
   
   function run() {
     grabFrames();
-    const pmore = Pmore(frames, createViewer());
-    redirectKeys(pmore);
+    const pmore = Pmore(frames, createViewer(onend));
+    keyRedirecter = createKeyRedirecter(pmore);
+    keyRedirecter.start();
     pmore.start();
+  }
+  
+  function onend() {
+    keyRedirecter.stop();
   }
 }

@@ -1,6 +1,7 @@
 import resolve from "rollup-plugin-node-resolve";
 import cjs from "rollup-plugin-cjs-es";
 import json from "rollup-plugin-json";
+import re from "rollup-plugin-re";
 
 export default {
   input: [
@@ -15,7 +16,15 @@ export default {
   plugins: [
     resolve(),
     json(),
-    cjs({nested: true})
+    cjs({nested: true}),
+    re({
+      patterns: [
+        {
+          test: /\bimport\(.+?\)/g,
+          replace: "null"
+        }
+      ]
+    })
   ],
   experimentalCodeSplitting: true,
   context: "self"

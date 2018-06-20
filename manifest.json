@@ -30,13 +30,16 @@
       "include_globs": ["*.ans", "*.bbs", "*.ansi"],
       "js": [
         "js/content.js"
+      ],
+      "css": [
+        "css/bbs-reader.css",
+        "css/viewer.css"
       ]
     }
 	],
 	
 	"web_accessible_resources": [
-		"js/content-worker.js",
-		"css/*"
+		"js/content-worker.js"
 	],
 	
 	"commands": {
