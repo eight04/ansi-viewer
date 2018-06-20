@@ -1,5 +1,3 @@
-import browser from "webextension-polyfill";
-
 browser.webRequest.onHeadersReceived.addListener(details => {
   if (details.method == "POST") {
     return;
@@ -59,6 +57,9 @@ function viewAsANSI(tabId, url) {
     if (_tabId !== tabId || tab.url !== url) {
       return;
     }
+    browser.tabs.executeScript(tabId, {
+      file: "/js/browser-polyfill.min.js"
+    });
     browser.tabs.executeScript(tabId, {
       file: "/js/content.js"
     });

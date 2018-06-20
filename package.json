@@ -19,7 +19,7 @@
     "build": "shx rm -rf js && rollup -c && npm run build-asset",
     "build-zip": "web-ext build --ignore-files **/*.log",
     "postversion": "npm run build && npm run build-zip && git push --follow-tags",
-    "build-asset": "shx mkdir -p css && shx cp node_modules/bbs-reader/bbs-reader.css css"
+    "build-asset": "shx mkdir -p css && shx cp node_modules/bbs-reader/bbs-reader.css css && shx cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js js"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
