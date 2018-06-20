@@ -12,14 +12,14 @@
     "webextension-polyfill": "^0.2.1"
   },
   "scripts": {
-    "test": "eslint **/*.js --cache --ignore-pattern js && web-ext lint",
+    "test": "eslint **/*.js --cache --ignore-pattern extension && web-ext lint",
     "start": "web-ext run",
     "preversion": "npm test",
-    "version": "sync-version manifest.json && git add .",
-    "build": "shx rm -rf js && rollup -c && npm run build-asset",
-    "build-zip": "web-ext build --ignore-files **/*.log",
+    "version": "sync-version extension/manifest.json && git add .",
+    "build": "shx rm -rf extension/js && rollup -c && npm run build-asset",
+    "build-zip": "web-ext build",
     "postversion": "npm run build && npm run build-zip && git push --follow-tags",
-    "build-asset": "shx mkdir -p css && shx cp node_modules/bbs-reader/bbs-reader.css css && shx cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js js"
+    "build-asset": "shx mkdir -p extension/css && shx cp node_modules/bbs-reader/bbs-reader.css extension/css && shx cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js extension/js"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

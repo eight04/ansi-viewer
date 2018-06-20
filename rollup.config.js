@@ -10,7 +10,7 @@ export default {
     "src/ansi-worker.js"
   ],
   output: {
-    dir: "js",
+    dir: "extension/js",
     format: "es"
   },
   plugins: [

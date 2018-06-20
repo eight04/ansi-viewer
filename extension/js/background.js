@@ -1,7 +1,7 @@
 /* eslint-env webextensions */
 
 const VALID_CONTENT_TYPE = new Set([
-  "text/plain", "text/ansi", "text/x-ansi", "application/octet-stream"
+  "text/plain", "text/ansi", "text/x-ansi"
 ]);
 
 browser.webRequest.onHeadersReceived.addListener(details => {
