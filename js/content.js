@@ -687,10 +687,10 @@ function createScrollPosSaver(hashedURL) {
 
 /* eslint-env webextensions */
 
-function getBinary(file){
+function getBinary(file, type = "blob"){
 	return new Promise((resolve, reject) => {
 		var xhr = new XMLHttpRequest();
-		xhr.responseType = "arraybuffer";
+		xhr.responseType = type;
 		xhr.open("GET", file);
 		xhr.addEventListener("load", () => resolve(xhr.response));
 		xhr.addEventListener("error", () => reject(xhr));
@@ -698,19 +698,32 @@ function getBinary(file){
 	});
 }
 
-function compileANSI(buffer) {
+function compileANSI(data) {
   return browser.runtime.sendMessage({
-    name: "COMPILE_ANSI",
-    data: URL.createObjectURL(new Blob([buffer]))
+    method: "compileANSI",
+    data
+  });
+}
+
+function readFile(blob, type) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader;
+    reader.addEventListener("load", e => resolve(e.target.result));
+    reader.addEventListener("error", reject);
+    if (type == "buffer") {
+      reader.readAsArrayBuffer(blob);
+    } else {
+      reader.readAsBinaryString(blob);
+    }
   });
 }
 
 function init() {
 	document.documentElement.style.background = "black";
   const pendingRoot = drawRoot();
-  const pendingBuffer = getBinary(location.href);
-  const pendingHash = pendingBuffer.then(getHash);
-  const pendingANSI = pendingBuffer.then(compileANSI);
+  const pendingBinary = getBinary(location.href);
+  const pendingHash = pendingBinary.then(b => readFile(b, "buffer")).then(getHash);
+  const pendingANSI = pendingBinary.then(b => readFile(b, "binary")).then(compileANSI);
   const pendingURLHash = getHash(new TextEncoder("utf8").encode(location.href));
   const LOOP_TIMEOUT = 2000;
   
@@ -761,8 +774,8 @@ function init() {
   }
   
   function drawANSILoop(hash) {
-    getBinary(location.href)
-      .then(buffer => 
+    getBinary(location.href, "arraybuffer")
+      .then(buffer =>
         getHash(buffer)
           .then(_hash => {
             if (_hash == hash) {

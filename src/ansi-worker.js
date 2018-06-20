@@ -5,21 +5,17 @@ function blob2binaryString(blob) {
   return new FileReader().readAsBinaryString(blob);
 }
 
-function compileANSI(objectURL) {
-  return fetch(objectURL)
-    .then(r => r.blob())
-    .then(blob => {
-      URL.revokeObjectURL(objectURL);
-      const result = bbsReader(blob2binaryString(blob));
-      return {
-        title: result.title && uaoDecode(result.title),
-        html: result.html && uaoDecode(result.html)
-      };
-    });
+function compileANSI(binaryString) {
+  const result = bbsReader(binaryString);
+  return {
+    title: result.title && uaoDecode(result.title),
+    html: result.html && uaoDecode(result.html)
+  };
 }
 
 self.addEventListener("message", e => {
-  compileANSI(e.data.data)
+  Promise.resolve()
+    .then(() => compileANSI(e.data.data))
     .then(data => ({
       error: false,
       data,

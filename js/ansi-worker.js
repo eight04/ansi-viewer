@@ -20121,25 +20121,17 @@ function bbsReader(data) {
     };
 }
 
-function blob2binaryString(blob) {
-  return new FileReader().readAsBinaryString(blob);
-}
-
-function compileANSI(objectURL) {
-  return fetch(objectURL)
-    .then(r => r.blob())
-    .then(blob => {
-      URL.revokeObjectURL(objectURL);
-      const result = bbsReader(blob2binaryString(blob));
-      return {
-        title: result.title && _export_decodeSync_(result.title),
-        html: result.html && _export_decodeSync_(result.html)
-      };
-    });
+function compileANSI(binaryString) {
+  const result = bbsReader(binaryString);
+  return {
+    title: result.title && _export_decodeSync_(result.title),
+    html: result.html && _export_decodeSync_(result.html)
+  };
 }
 
 self.addEventListener("message", e => {
-  compileANSI(e.data.data)
+  Promise.resolve()
+    .then(() => compileANSI(e.data.data))
     .then(data => ({
       error: false,
       data,

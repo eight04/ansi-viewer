@@ -25,9 +25,9 @@ browser.webRequest.onHeadersReceived.addListener(details => {
       viewAsANSI(details.tabId, details.url);
     }
     if (header) {
-      header.value = "text/plain";
+      header.value = "text/html";
     } else {
-      details.responseHeaders.push({name: "Content-Type", value: "text/plain"});
+      details.responseHeaders.push({name: "Content-Type", value: "text/html"});
     }
     return {responseHeaders: details.responseHeaders};
   }
@@ -38,10 +38,19 @@ browser.webRequest.onHeadersReceived.addListener(details => {
 
 const ansiWorker = createANSIWorker();
 
+const METHODS = {
+  compileANSI: ansiWorker.compileANSI
+};
+
 browser.runtime.onMessage.addListener(message => {
-  if (message.name === "COMPILE_ANSI") {
-    return ansiWorker.compileANSI(message.data);
+  if (!METHODS[message.method]) {
+    return;
   }
+  return METHODS[message.method](message.data)
+    .catch(err => {
+      console.error(err); // eslint-disable-line
+      throw err;
+    });
 });
 
 function createANSIWorker() {
