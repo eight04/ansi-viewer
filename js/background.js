@@ -34,6 +34,56 @@ browser.webRequest.onHeadersReceived.addListener(details => {
   types: ["main_frame"]
 }, ["blocking", "responseHeaders"]);
 
+const ansiWorker = createANSIWorker();
+
+browser.runtime.onMessage.addListener(message => {
+  if (message.name === "COMPILE_ANSI") {
+    return ansiWorker.compileANSI(message.data);
+  }
+});
+
+function createANSIWorker() {
+  let worker;
+  let error;
+  let nextId = 0;
+  const waitForResponse = new Map;
+  return {compileANSI};
+  
+  function init() {
+    worker = new Worker("/js/ansi-worker.js");
+    worker.addEventListener("error", onError);
+    worker.addEventListener("message", onMessage);
+  }
+  
+  function compileANSI(data) {
+    if (!worker) {
+      init();
+    }
+    return new Promise((resolve, reject) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      const requestId = nextId++;
+      worker.postMessage({requestId, data});
+      waitForResponse.set(requestId, {resolve, reject});
+    });
+  }
+  
+  function onError(err) {
+    error = err;
+  }
+  
+  function onMessage(e) {
+    if (e.data.error) {
+      waitForResponse.get(e.data.requestId).reject(e.data.data);
+    } else {
+      waitForResponse.get(e.data.requestId).resolve(e.data.data);
+    }
+    waitForResponse.delete(e.data.requestId);
+  }
+}
+
 const waitForUpdate = new Set;
 function viewAsANSI(tabId, url) {
   init();

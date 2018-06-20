@@ -695,41 +695,19 @@ function getBinary(file){
 	});
 }
 
-function createWorker() {
-  const worker = new Worker(browser.runtime.getURL("/js/content-worker.js"));
-  let error;
-  worker.onerror = err => error = err;
-  return {compileANSI, stop};
-  
-  function stop() {
-    worker.terminate();
-  }
-  
-  function compileANSI(buffer) {
-    return new Promise((resolve, reject) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      worker.addEventListener("message", e => {
-        if (e.data.error) {
-          reject(e.data.data);
-          return;
-        }
-        resolve(e.data.data);
-      }, {once: true});
-      worker.postMessage(buffer, [buffer]);
-    });
-  }
+function compileANSI(buffer) {
+  return browser.runtime.sendMessage({
+    name: "COMPILE_ANSI",
+    data: URL.createObjectURL(new Blob([buffer]))
+  });
 }
 
 function init() {
 	document.documentElement.style.background = "black";
-  const worker = createWorker();
   const pendingRoot = drawRoot();
   const pendingBuffer = getBinary(location.href);
   const pendingHash = pendingBuffer.then(getHash);
-  const pendingANSI = pendingBuffer.then(b => worker.compileANSI(b));
+  const pendingANSI = pendingBuffer.then(compileANSI);
   const pendingURLHash = getHash(new TextEncoder("utf8").encode(location.href));
   const LOOP_TIMEOUT = 2000;
   
@@ -758,8 +736,6 @@ function init() {
         return pendingHash.then(hash => {
           setTimeout(drawANSILoop, LOOP_TIMEOUT, hash);
         });
-      } else {
-        worker.stop();
       }
     })
     .catch(console.error);
@@ -790,7 +766,7 @@ function init() {
               return;
             }
             hash = _hash;
-            return worker.compileANSI(buffer)
+            return compileANSI(buffer)
               .then(result => document.querySelector(".bbs").innerHTML = result.html);
           })
       )

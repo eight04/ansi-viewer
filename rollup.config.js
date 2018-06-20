@@ -7,7 +7,7 @@ export default {
   input: [
     "src/background.js",
     "src/content.js",
-    "src/content-worker.js"
+    "src/ansi-worker.js"
   ],
   output: {
     dir: "js",

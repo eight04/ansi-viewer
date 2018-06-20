@@ -188,13 +188,14 @@ export function createPmore() {
   
   function run() {
     grabFrames();
+    
     const pmore = Pmore(frames, createViewer(onend));
-    keyRedirecter = createKeyRedirecter(pmore);
+    const keyRedirecter = createKeyRedirecter(pmore);
     keyRedirecter.start();
     pmore.start();
-  }
-  
-  function onend() {
-    keyRedirecter.stop();
+    
+    function onend() {
+      keyRedirecter.stop();
+    }
   }
 }

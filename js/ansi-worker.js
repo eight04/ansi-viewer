@@ -20121,37 +20121,34 @@ function bbsReader(data) {
     };
 }
 
-function buffer2str(buffer) {
-	var arr = new Uint8Array(buffer),
-		i, s = "";
-		
-	for (i = 0; i < arr.length; i++) {
-		s += String.fromCharCode(arr[i]);
-	}
-	
-	return s;
+function blob2binaryString(blob) {
+  return new FileReader().readAsBinaryString(blob);
 }
 
-function compileANSI(buffer) {
-  const result = bbsReader(buffer2str(buffer));
-  return {
-    title: result.title && _export_decodeSync_(result.title),
-    html: result.html && _export_decodeSync_(result.html)
-  };
+function compileANSI(objectURL) {
+  return fetch(objectURL)
+    .then(r => r.blob())
+    .then(blob => {
+      URL.revokeObjectURL(objectURL);
+      const result = bbsReader(blob2binaryString(blob));
+      return {
+        title: result.title && _export_decodeSync_(result.title),
+        html: result.html && _export_decodeSync_(result.html)
+      }
+    })
 }
 
 self.addEventListener("message", e => {
-  let result;
-  try {
-    result = {
+  compileANSI(e.data.data)
+    .then(data => ({
       error: false,
-      data: compileANSI(e.data)
-    };
-  } catch (err) {
-    result = {
+      data,
+      requestId: e.data.requestId
+    }))
+    .catch(err => ({
       error: true,
-      data: err
-    };
-  }
-  self.postMessage(result);
+      data: err,
+      requestId: e.data.requestId
+    }))
+    .then(result => self.postMessage(result));
 });

@@ -40,10 +40,6 @@
     }
 	],
 	
-	"web_accessible_resources": [
-		"js/content-worker.js"
-	],
-	
 	"commands": {
 		"VIEW_AS_ANSI": {
 			"suggested_key": {
