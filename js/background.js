@@ -1,3 +1,5 @@
+/* eslint-env webextensions */
+
 browser.webRequest.onHeadersReceived.addListener(details => {
   if (details.method == "POST") {
     return;

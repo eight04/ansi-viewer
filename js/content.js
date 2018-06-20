@@ -660,14 +660,15 @@ function createPmore() {
   
   function run() {
     grabFrames();
+    
     const pmore = Pmore(frames, createViewer(onend));
-    keyRedirecter = createKeyRedirecter(pmore);
+    const keyRedirecter = createKeyRedirecter(pmore);
     keyRedirecter.start();
     pmore.start();
-  }
-  
-  function onend() {
-    keyRedirecter.stop();
+    
+    function onend() {
+      keyRedirecter.stop();
+    }
   }
 }
 
@@ -683,6 +684,8 @@ function createScrollPosSaver(hashedURL) {
     // pass
   }
 }
+
+/* eslint-env webextensions */
 
 function getBinary(file){
 	return new Promise((resolve, reject) => {
@@ -738,7 +741,7 @@ function init() {
         });
       }
     })
-    .catch(console.error);
+    .catch(console.error); // eslint-disable-line
   
   function drawRoot() {
     if (document.readyState != "loading") {

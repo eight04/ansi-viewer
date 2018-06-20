@@ -20134,8 +20134,8 @@ function compileANSI(objectURL) {
       return {
         title: result.title && _export_decodeSync_(result.title),
         html: result.html && _export_decodeSync_(result.html)
-      }
-    })
+      };
+    });
 }
 
 self.addEventListener("message", e => {
