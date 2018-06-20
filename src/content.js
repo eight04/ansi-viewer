@@ -7,7 +7,9 @@ function getBinary(file, type = "blob"){
 		var xhr = new XMLHttpRequest();
 		xhr.responseType = type;
 		xhr.open("GET", file);
-		xhr.addEventListener("load", () => resolve(xhr.response));
+		xhr.addEventListener("load", () =>
+      readBinaryString(xhr.response).then(resolve, reject)
+    );
 		xhr.addEventListener("error", () => reject(xhr));
 		xhr.send();
 	});
@@ -20,16 +22,12 @@ function compileANSI(data) {
   });
 }
 
-function readFile(blob, type) {
+function readBinaryString(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader;
     reader.addEventListener("load", e => resolve(e.target.result));
     reader.addEventListener("error", reject);
-    if (type == "buffer") {
-      reader.readAsArrayBuffer(blob);
-    } else {
-      reader.readAsBinaryString(blob);
-    }
+    reader.readAsBinaryString(blob);
   });
 }
 
@@ -37,9 +35,7 @@ function init() {
 	document.documentElement.style.background = "black";
   const pendingRoot = drawRoot();
   const pendingBinary = getBinary(location.href);
-  const pendingHash = pendingBinary.then(b => readFile(b, "buffer")).then(getHash);
-  const pendingANSI = pendingBinary.then(b => readFile(b, "binary")).then(compileANSI);
-  const pendingURLHash = getHash(new TextEncoder("utf8").encode(location.href));
+  const pendingANSI = pendingBinary.then(compileANSI);
   const LOOP_TIMEOUT = 2000;
   
   Promise.all([pendingRoot, pendingANSI])
@@ -55,17 +51,14 @@ function init() {
           e.preventDefault();
         }
       });
-      return pendingURLHash;
-    })
-    .then(urlHash => {
-      createScrollPosSaver(urlHash);
+      createScrollPosSaver(location.href);
       document.documentElement.style = "";
       const pmore = createPmore();
       if (pmore.isAnimation() && confirm("要執行動畫嗎？")) {
         pmore.run();
       } else if (location.protocol == "file:") {
-        return pendingHash.then(hash => {
-          setTimeout(drawANSILoop, LOOP_TIMEOUT, hash);
+        return pendingBinary.then(binary => {
+          setTimeout(drawANSILoop, LOOP_TIMEOUT, binary);
         });
       }
     })
@@ -88,27 +81,17 @@ function init() {
     }
   }
   
-  function drawANSILoop(hash) {
-    getBinary(location.href, "arraybuffer")
-      .then(buffer =>
-        getHash(buffer)
-          .then(_hash => {
-            if (_hash == hash) {
-              return;
-            }
-            hash = _hash;
-            return compileANSI(buffer)
-              .then(result => document.querySelector(".bbs").innerHTML = result.html);
-          })
-      )
-      .then(() => setTimeout(drawANSILoop, LOOP_TIMEOUT, hash));
-  }
-  
-  function getHash(buffer) {
-    return crypto.subtle.digest("SHA-256", buffer)
-      .then(hash => {
-        return new TextDecoder("latin1").decode(hash);
-      });
+  function drawANSILoop(binary) {
+    getBinary(location.href)
+      .then(newBinary => {
+        if (newBinary == binary) {
+          return;
+        }
+        binary = newBinary;
+        return compileANSI(binary)
+          .then(result => document.querySelector(".bbs").innerHTML = result.html);
+      })
+      .then(() => setTimeout(drawANSILoop, LOOP_TIMEOUT, binary));
   }
 }
 

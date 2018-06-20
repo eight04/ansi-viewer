@@ -1,10 +1,6 @@
 import {decodeSync as uaoDecode} from "uao-js";
 import bbsReader from "bbs-reader";
 
-function blob2binaryString(blob) {
-  return new FileReader().readAsBinaryString(blob);
-}
-
 function compileANSI(binaryString) {
   const result = bbsReader(binaryString);
   return {

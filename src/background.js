@@ -25,9 +25,9 @@ browser.webRequest.onHeadersReceived.addListener(details => {
       viewAsANSI(details.tabId, details.url);
     }
     if (header) {
-      header.value = "text/html";
+      header.value = "text/plain";
     } else {
-      details.responseHeaders.push({name: "Content-Type", value: "text/html"});
+      details.responseHeaders.push({name: "Content-Type", value: "text/plain"});
     }
     return {responseHeaders: details.responseHeaders};
   }
