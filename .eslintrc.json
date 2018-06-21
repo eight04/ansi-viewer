@@ -1,13 +1,17 @@
 {
 	"env": {
 		"es6": true,
-		"node": true
+		"browser": true
 	},
 	"rules": {
+    "no-console": [2, {"allow": ["error"]}],
 		"no-use-before-define": [2, "nofunc"],
 		"semi": [2, "always"]
 	},
 	"extends": [
 		"eslint:recommended"
-	]
+	],
+  "parserOptions": {
+    "sourceType": "module"
+  }
 }

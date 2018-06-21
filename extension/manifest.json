@@ -13,41 +13,35 @@
 		"tabs",
 		"webRequest",
 		"webRequestBlocking",
-		"*://*/*",
-		"file:///*"
+    "<all_urls>"
 	],
 	
 	"background": {
 		"scripts": [
-			"lib/browser-polyfill.js",
-			"background/lib.js",
-			"background/background.js"
+      "js/browser-polyfill.min.js",
+			"js/background.js"
 		]
 	},
 	
 	"content_scripts": [
-		{
-			"matches": [
-				"*://*/*",
-				"file:///*.ans",
-				"file:///*.bbs",
-				"file:///*.ansi"
-			],
-			"js": [
-				"lib/browser-polyfill.js",
-				"content/injector.js"
-			],
-			"run_at": "document_start"
-		}
-	],
-	
-	"web_accessible_resources": [
-		"public/*.js",
-		"public/*.css"
+    {
+      "matches": [
+        "file:///*"
+      ],
+      "include_globs": ["*.ans", "*.bbs", "*.ansi"],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/content.js"
+      ],
+      "css": [
+        "css/bbs-reader.css",
+        "css/viewer.css"
+      ]
+    }
 	],
 	
 	"commands": {
-		"view-as-ansi": {
+		"viewAsANSI": {
 			"suggested_key": {
 				"default": "Alt+A"
 			},

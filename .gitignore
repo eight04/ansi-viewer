@@ -4,3 +4,4 @@ web-ext-artifacts
 *.zip
 *.xpi
 *.log
+.eslintcache

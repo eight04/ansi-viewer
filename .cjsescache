@@ -1,0 +1,15 @@
+{
+  "extension/manifest.json": "named",
+  "node_modules/bbs-reader/bbs-reader.js": "default",
+  "node_modules/pmore/src/frame.js": "default",
+  "node_modules/pmore/src/parser.js": "named",
+  "node_modules/pmore/src/pmore.js": "default",
+  "node_modules/uao-js/index.js": "named",
+  "node_modules/uao-js/table/b2u.json": "default",
+  "node_modules/uao-js/table/u2b.json": "default",
+  "src/ansi-worker.js": "default",
+  "src/background.js": "default",
+  "src/content.js": "default",
+  "src/pmore.js": "named",
+  "src/scroll-pos-saver.js": "named"
+}
