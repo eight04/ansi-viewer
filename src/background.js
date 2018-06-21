@@ -5,6 +5,8 @@ const VALID_CONTENT_TYPE = new Set([
   "text/plain", "text/ansi", "text/x-ansi"
 ]);
 
+const ansiViewer = createANSIViewer();
+
 browser.webRequest.onHeadersReceived.addListener(details => {
   if (details.method == "POST") {
     return;
@@ -20,7 +22,7 @@ browser.webRequest.onHeadersReceived.addListener(details => {
   if (/\.(ans|bbs|ansi)$/.test(url.pathname) && VALID_CONTENT_TYPE.has(header.value)) {
     // FIXME: handle file requests
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1341341
-    viewAsANSI(details.tabId, details.url);
+    ansiViewer.schedule(details.tabId, details.url);
     return {responseHeaders: details.responseHeaders.filter(h => h !== header)};
   }
 }, {
@@ -43,6 +45,13 @@ browser.runtime.onMessage.addListener(message => {
       console.error(err); // eslint-disable-line
       throw err;
     });
+});
+
+browser.contextMenus.create({
+  title: "View as ANSI",
+  onclick(info, tab) {
+    ansiViewer.inject(tab.id);
+  }
 });
 
 function createANSIWorker() {
@@ -87,41 +96,46 @@ function createANSIWorker() {
   }
 }
 
-const waitForUpdate = new Set;
-function viewAsANSI(tabId, url) {
-  init();
+function createANSIViewer() {
+  const waitForUpdate = new Set;
+  return {schedule, inject};
   
-  function init() {
-    if (waitForUpdate.has(tabId)) {
-      return;
-    }
-    browser.tabs.onUpdated.addListener(onUpdated);
-    browser.tabs.onRemoved.addListener(onRemoved);
-    waitForUpdate.add(tabId);
-  }
-  
-  function uninit() {
-    browser.tabs.onUpdated.removeListener(onUpdated);
-    browser.tabs.onRemoved.removeListener(onRemoved);
-    waitForUpdate.delete(tabId);
-  }
-  
-  function onUpdated(_tabId, changeInfo, tab) {
-    if (_tabId !== tabId || tab.url !== url) {
-      return;
-    }
+  function inject(tabId) {
     for (const file of contentScripts[0].js) {
       browser.tabs.executeScript(tabId, {file});
     }
     for (const file of contentScripts[0].css) {
       browser.tabs.insertCSS(tabId, {file});
     }
-    uninit();
   }
   
-  function onRemoved(_tabId) {
-    if (_tabId === tabId) {
+  // inject when the URL of the tab had been changed to url
+  function schedule(tabId, url) {
+    if (waitForUpdate.has(tabId)) {
+      return;
+    }
+    browser.tabs.onUpdated.addListener(onUpdated);
+    browser.tabs.onRemoved.addListener(onRemoved);
+    waitForUpdate.add(tabId);
+    
+    function uninit() {
+      browser.tabs.onUpdated.removeListener(onUpdated);
+      browser.tabs.onRemoved.removeListener(onRemoved);
+      waitForUpdate.delete(tabId);
+    }
+    
+    function onUpdated(_tabId, changeInfo, tab) {
+      if (_tabId !== tabId || tab.url !== url) {
+        return;
+      }
+      inject(tabId);
       uninit();
+    }
+    
+    function onRemoved(_tabId) {
+      if (_tabId === tabId) {
+        uninit();
+      }
     }
   }
 }

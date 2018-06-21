@@ -31,14 +31,14 @@ function readBinaryString(blob) {
   });
 }
 
-function init() {
+function createANSIViewer() {
   document.documentElement.style.background = "black";
   const pendingRoot = drawRoot();
   const pendingBinary = getBinary(location.href);
   const pendingANSI = pendingBinary.then(compileANSI);
   const LOOP_TIMEOUT = 2000;
   
-  Promise.all([pendingRoot, pendingANSI])
+  return Promise.all([pendingRoot, pendingANSI])
     .then(([, result]) => {
       if (result.title) {
         document.title = result.title;
@@ -95,4 +95,6 @@ function init() {
   }
 }
 
-init();
+if (!window.ansiViewer) {
+  window.ansiViewer = createANSIViewer();
+}
