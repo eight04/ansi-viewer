@@ -43,9 +43,9 @@ function createKeyRedirecter(pmore) {
 }
 
 function createViewer(onend) {
-	var statusBar = document.querySelector(".statusbar"),
-		lines = document.querySelectorAll(".line"),
-		blackout;
+  var statusBar = document.querySelector(".statusbar"),
+    lines = document.querySelectorAll(".line"),
+    blackout;
     
   const keyNameMap = {
     "@P": "PgUp",
@@ -65,91 +65,91 @@ function createViewer(onend) {
     // map key back to name for displaying
     return keyNameMap[key] || key;
   }
-	
-	function drawOptions(options) {
-		var i, frag = document.createDocumentFragment();
-		for (i = 0; i < options.length; i++) {
-			var span = document.createElement("span"),
-				key = document.createElement("span"),
-				message = document.createElement("span");
-				
-			span.className = "option";
-				
-			key.className = "key";
-			key.textContent = getKeyName(options[i].key);
-			
-			message.className = "message";
-			message.textContent = options[i].message;
-			
-			span.appendChild(key);
-			span.appendChild(message);
-			
-			frag.appendChild(span);
-		}
-		return frag;
-	}
-	
-	function drawSpan(text) {
-		var span = document.createElement("span");
-		span.className = "option";
-		span.textContent = text;
-		return span;
-	}
-	
-	return {
-		scrollTo: function(frame) {
-			if (blackout) {
-				blackout.classList.remove("blackout");
-				blackout = null;
-			}
-			lines[frame.line + 1].scrollIntoView();
-			if (frame.blackout) {
-				frame.blackout.classList.add("blackout");
-				blackout = frame.blackout;
-			}
-		},
-		scrollToLine: function(i) {
-			lines[i].scrollToView();
-		},
-		getPageSize: function() {
-			return 23;
-		},
-		pause: function() {
-			statusBar.innerHTML = "";
-			statusBar.appendChild(drawSpan("動畫暫停，按任意鍵繼續"));
-			statusBar.classList.remove("hidden");
-		},
-		unpause: function() {
-			statusBar.classList.add("hidden");
-		},
-		forceEnd: function() {
-			alert("強制中斷動畫！");
-		},
-		end: function() {
-			if (blackout) {
-				blackout.classList.remove("blackout");
-				blackout = null;
-			}
+  
+  function drawOptions(options) {
+    var i, frag = document.createDocumentFragment();
+    for (i = 0; i < options.length; i++) {
+      var span = document.createElement("span"),
+        key = document.createElement("span"),
+        message = document.createElement("span");
+        
+      span.className = "option";
+        
+      key.className = "key";
+      key.textContent = getKeyName(options[i].key);
+      
+      message.className = "message";
+      message.textContent = options[i].message;
+      
+      span.appendChild(key);
+      span.appendChild(message);
+      
+      frag.appendChild(span);
+    }
+    return frag;
+  }
+  
+  function drawSpan(text) {
+    var span = document.createElement("span");
+    span.className = "option";
+    span.textContent = text;
+    return span;
+  }
+  
+  return {
+    scrollTo: function(frame) {
+      if (blackout) {
+        blackout.classList.remove("blackout");
+        blackout = null;
+      }
+      lines[frame.line + 1].scrollIntoView();
+      if (frame.blackout) {
+        frame.blackout.classList.add("blackout");
+        blackout = frame.blackout;
+      }
+    },
+    scrollToLine: function(i) {
+      lines[i].scrollToView();
+    },
+    getPageSize: function() {
+      return 23;
+    },
+    pause: function() {
+      statusBar.innerHTML = "";
+      statusBar.appendChild(drawSpan("動畫暫停，按任意鍵繼續"));
+      statusBar.classList.remove("hidden");
+    },
+    unpause: function() {
+      statusBar.classList.add("hidden");
+    },
+    forceEnd: function() {
+      alert("強制中斷動畫！");
+    },
+    end: function() {
+      if (blackout) {
+        blackout.classList.remove("blackout");
+        blackout = null;
+      }
       if (onend) {
         onend();
       }
-		},
-		inputStart: function(options) {
-			statusBar.innerHTML = "";
-			statusBar.appendChild(drawOptions(options));
-			statusBar.classList.remove("hidden");
-		},
-		inputEnd: function() {
-			statusBar.classList.add("hidden");
-		},
-		inputSelect: function(i) {
-			var selected = statusBar.querySelector(".selected");
-			if (selected) {
-				selected.classList.remove("selected");
-			}
-			statusBar.children[i].classList.add("selected");
-		}
-	};
+    },
+    inputStart: function(options) {
+      statusBar.innerHTML = "";
+      statusBar.appendChild(drawOptions(options));
+      statusBar.classList.remove("hidden");
+    },
+    inputEnd: function() {
+      statusBar.classList.add("hidden");
+    },
+    inputSelect: function(i) {
+      var selected = statusBar.querySelector(".selected");
+      if (selected) {
+        selected.classList.remove("selected");
+      }
+      statusBar.children[i].classList.add("selected");
+    }
+  };
 }
 
 export function createPmore() {

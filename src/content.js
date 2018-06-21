@@ -3,16 +3,16 @@ import {createPmore} from "./pmore.js";
 import {createScrollPosSaver} from "./scroll-pos-saver.js";
 
 function getBinary(file, type = "blob"){
-	return new Promise((resolve, reject) => {
-		var xhr = new XMLHttpRequest();
-		xhr.responseType = type;
-		xhr.open("GET", file);
-		xhr.addEventListener("load", () =>
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = type;
+    xhr.open("GET", file);
+    xhr.addEventListener("load", () =>
       readBinaryString(xhr.response).then(resolve, reject)
     );
-		xhr.addEventListener("error", () => reject(xhr));
-		xhr.send();
-	});
+    xhr.addEventListener("error", () => reject(xhr));
+    xhr.send();
+  });
 }
 
 function compileANSI(data) {
@@ -32,7 +32,7 @@ function readBinaryString(blob) {
 }
 
 function init() {
-	document.documentElement.style.background = "black";
+  document.documentElement.style.background = "black";
   const pendingRoot = drawRoot();
   const pendingBinary = getBinary(location.href);
   const pendingANSI = pendingBinary.then(compileANSI);
