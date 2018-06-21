@@ -29,6 +29,12 @@ Screenshots
 Changelog
 ---------
 
+* 3.0.0 (Jun 21, 2018)
+
+  - Rewrite. Content scripts, background scripts, and worker are mostly bundled.
+  - Fix: failed to render ANSI file on the first load.
+  - Add: use a worker to compile ANSI string.
+
 * 2.0.2 (Feb 21, 2017)
 
 	- Update bbs-reader to 0.3.1. Fix infinite loop bug.
