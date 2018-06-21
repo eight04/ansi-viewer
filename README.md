@@ -26,6 +26,18 @@ Screenshots
 
 ![screenshot](http://i.imgur.com/s1uUlLH.png)
 
+Build the addon
+---------------
+
+Files inside `extension/js` are built from `src` folder. Run `npm run build` to build them, or `node_modules/.bin/rollup -cw` to enter the watch mode.
+
+This addon uses following libraries:
+
+* [bbs-reader](https://www.npmjs.com/package/bbs-reader): Compile ANSI string into HTML.
+* [pmore](https://www.npmjs.com/package/pmore): Run pmore animation with JavaScript.
+* [uao-js](https://www.npmjs.com/package/uao-js): Decode Big5-UAO content.
+* [webextension-polyfill](https://www.npmjs.com/package/webextension-polyfill): Chrome compatibility.
+
 Changelog
 ---------
 
