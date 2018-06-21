@@ -95,10 +95,4 @@ function init() {
   }
 }
 
-if (
-  document.contentType == "text/plain" ||
-  document.contentType == "text/x-ansi" ||
-  document.contentType == "text/ansi"
-) {
-  init();
-}
+init();
