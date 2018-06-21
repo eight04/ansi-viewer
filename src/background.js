@@ -1,4 +1,5 @@
 /* eslint-env webextensions */
+import {content_scripts as contentScripts} from "../extension/manifest.json";
 
 const VALID_CONTENT_TYPE = new Set([
   "text/plain", "text/ansi", "text/x-ansi"
@@ -109,18 +110,12 @@ function viewAsANSI(tabId, url) {
     if (_tabId !== tabId || tab.url !== url) {
       return;
     }
-    browser.tabs.executeScript(tabId, {
-      file: "/js/browser-polyfill.min.js"
-    });
-    browser.tabs.executeScript(tabId, {
-      file: "/js/content.js"
-    });
-    browser.tabs.insertCSS(tabId, {
-      file: "/css/bbs-reader.css"
-    });
-    browser.tabs.insertCSS(tabId, {
-      file: "/css/viewer.css"
-    });
+    for (const file of contentScripts[0].js) {
+      browser.tabs.executeScript(tabId, {file});
+    }
+    for (const file of contentScripts[0].css) {
+      browser.tabs.insertCSS(tabId, {file});
+    }
     uninit();
   }
   

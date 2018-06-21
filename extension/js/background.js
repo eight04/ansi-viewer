@@ -1,3 +1,24 @@
+var content_scripts = [
+	{
+		matches: [
+			"file:///*"
+		],
+		include_globs: [
+			"*.ans",
+			"*.bbs",
+			"*.ansi"
+		],
+		js: [
+			"js/browser-polyfill.min.js",
+			"js/content.js"
+		],
+		css: [
+			"css/bbs-reader.css",
+			"css/viewer.css"
+		]
+	}
+];
+
 /* eslint-env webextensions */
 
 const VALID_CONTENT_TYPE = new Set([
@@ -109,18 +130,12 @@ function viewAsANSI(tabId, url) {
     if (_tabId !== tabId || tab.url !== url) {
       return;
     }
-    browser.tabs.executeScript(tabId, {
-      file: "/js/browser-polyfill.min.js"
-    });
-    browser.tabs.executeScript(tabId, {
-      file: "/js/content.js"
-    });
-    browser.tabs.insertCSS(tabId, {
-      file: "/css/bbs-reader.css"
-    });
-    browser.tabs.insertCSS(tabId, {
-      file: "/css/viewer.css"
-    });
+    for (const file of content_scripts[0].js) {
+      browser.tabs.executeScript(tabId, {file});
+    }
+    for (const file of content_scripts[0].css) {
+      browser.tabs.insertCSS(tabId, {file});
+    }
     uninit();
   }
   
