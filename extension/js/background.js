@@ -53,7 +53,15 @@ browser.webRequest.onHeadersReceived.addListener(details => {
 const ansiWorker = createANSIWorker();
 
 const METHODS = {
-  compileANSI: ansiWorker.compileANSI
+  compileANSI: ansiWorker.compileANSI,
+  viewAsANSI: () =>
+    browser.tabs.executeScript(null, {code: "document.contentType"})
+      .then(([type]) => {
+        if (VALID_CONTENT_TYPE.has(type)) {
+          return ansiViewer.inject();
+        }
+      })
+      .catch(console.error)
 };
 
 browser.runtime.onMessage.addListener(message => {
@@ -72,6 +80,13 @@ browser.contextMenus.create({
   onclick(info, tab) {
     ansiViewer.inject(tab.id);
   }
+});
+
+browser.commands.onCommand.addListener(command => {
+  if (!METHODS[command]) {
+    return;
+  }
+  METHODS[command]();
 });
 
 function createANSIWorker() {
@@ -120,7 +135,7 @@ function createANSIViewer() {
   const waitForUpdate = new Set;
   return {schedule, inject};
   
-  function inject(tabId) {
+  function inject(tabId = null) {
     for (const file of content_scripts[0].js) {
       browser.tabs.executeScript(tabId, {file});
     }

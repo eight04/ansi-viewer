@@ -4,6 +4,7 @@
 		"browser": true
 	},
 	"rules": {
+    "no-console": [2, {"allow": ["error"]}],
 		"no-use-before-define": [2, "nofunc"],
 		"semi": [2, "always"]
 	},

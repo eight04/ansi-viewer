@@ -41,7 +41,7 @@
 	],
 	
 	"commands": {
-		"VIEW_AS_ANSI": {
+		"viewAsANSI": {
 			"suggested_key": {
 				"default": "Alt+A"
 			},
