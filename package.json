@@ -22,14 +22,14 @@
     "build-asset": "shx mkdir -p extension/css && shx cp node_modules/bbs-reader/bbs-reader.css extension/css && shx cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js extension/js"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
+    "eslint": "^5.16.0",
     "rollup": "^0.60.7",
-    "rollup-plugin-cjs-es": "^0.4.0",
+    "rollup-plugin-cjs-es": "^0.8.0",
     "rollup-plugin-json": "^3.0.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-re": "^1.0.7",
     "shx": "^0.3.0",
     "sync-version": "^1.0.1",
-    "web-ext": "^2.7.0"
+    "web-ext": "^3.0.0"
   }
 }
