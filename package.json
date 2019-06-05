@@ -11,8 +11,9 @@
     "uao-js": "^1.0.1",
     "webextension-polyfill": "^0.4.0"
   },
+  "eslintIgnore": ["extension"],
   "scripts": {
-    "test": "eslint **/*.js --cache --ignore-pattern extension && web-ext lint",
+    "test": "eslint \"**/*.js\" --cache && web-ext lint",
     "start": "web-ext run",
     "preversion": "npm test",
     "version": "sync-version extension/manifest.json && git add .",
