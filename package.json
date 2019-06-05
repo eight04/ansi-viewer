@@ -9,7 +9,7 @@
     "bbs-reader": "^0.3.1",
     "pmore": "^0.1.1",
     "uao-js": "^1.0.1",
-    "webextension-polyfill": "^0.2.1"
+    "webextension-polyfill": "^0.4.0"
   },
   "scripts": {
     "test": "eslint **/*.js --cache --ignore-pattern extension && web-ext lint",
@@ -23,10 +23,10 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "rollup": "^0.60.7",
+    "rollup": "^1.14.0",
     "rollup-plugin-cjs-es": "^0.8.0",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.0.1",
     "rollup-plugin-re": "^1.0.7",
     "shx": "^0.3.2",
     "sync-version": "^1.0.1",
