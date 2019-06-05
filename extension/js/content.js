@@ -171,29 +171,29 @@ function FrameSet(values, viewer) {
 		}
 	}
 	
-	function resolve(i, cmd$$1) {
+	function resolve(i, cmd) {
 		// find next frame
-		if (cmd$$1.type == "name") {
-			return nameMap[cmd$$1.name];
+		if (cmd.type == "name") {
+			return nameMap[cmd.name];
 		}
 
-		if (cmd$$1.type == "frame") {
+		if (cmd.type == "frame") {
 			// it is confusing when negative
-			if (!cmd$$1.relative) {
-				return cmd$$1.number - 1;	// frame number starts with 1
+			if (!cmd.relative) {
+				return cmd.number - 1;	// frame number starts with 1
 			}
-			if (cmd$$1.number < 0) {
-				return i + cmd$$1.number - 1;	// why? no idea
+			if (cmd.number < 0) {
+				return i + cmd.number - 1;	// why? no idea
 			}
-			return i + cmd$$1.number;
+			return i + cmd.number;
 		}
 		
 		var targetLine, j;
-		if (cmd$$1.type == "line") {
-			if (cmd$$1.relative) {
-				targetLine = values[i].line + cmd$$1.number;
+		if (cmd.type == "line") {
+			if (cmd.relative) {
+				targetLine = values[i].line + cmd.number;
 			} else {
-				targetLine = cmd$$1.number - 1;	// line number starts with 1
+				targetLine = cmd.number - 1;	// line number starts with 1
 			}
 		} else {
 			/* It seems that this is how pmore works with pages:
@@ -205,10 +205,10 @@ function FrameSet(values, viewer) {
 			3. Find the ^L tag on target page
 			*/
 			var pageSize = viewer.getPageSize();
-			if (cmd$$1.relative) {
-				targetLine = (Math.floor(values[i].line / pageSize) + cmd$$1.number) * pageSize;
+			if (cmd.relative) {
+				targetLine = (Math.floor(values[i].line / pageSize) + cmd.number) * pageSize;
 			} else {
-				targetLine = (cmd$$1.number - 1) * pageSize;	// page number starts with 1
+				targetLine = (cmd.number - 1) * pageSize;	// page number starts with 1
 			}
 		}
 		for (j = 0; j < values.length; j++) {

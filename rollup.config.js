@@ -26,6 +26,5 @@ export default {
       ]
     })
   ],
-  experimentalCodeSplitting: true,
   context: "self"
 };
