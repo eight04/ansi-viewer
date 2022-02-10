@@ -1,4 +1,6 @@
 [
+  "~comlink:C:\\Users\\eight04\\dev\\ansi-viewer\\src\\lib\\ansi.worker.js",
+  "~omt:C:\\Users\\eight04\\dev\\ansi-viewer\\src\\lib\\ansi.worker.js?comlink",
   "node_modules/bbs-reader/bbs-reader.js",
   "node_modules/pmore/src/frame.js",
   "node_modules/pmore/src/pmore.js",

@@ -1,5 +1,5 @@
 /* eslint-env webextensions */
-import {content_scripts as contentScripts} from "../extension/manifest.json";
+import {compileANSI} from "./lib/ansi.worker.js";
 
 const VALID_CONTENT_TYPE = new Set([
   "text/plain", "text/ansi", "text/x-ansi"
@@ -30,10 +30,8 @@ browser.webRequest.onHeadersReceived.addListener(details => {
   types: ["main_frame"]
 }, ["blocking", "responseHeaders"]);
 
-const ansiWorker = createANSIWorker();
-
 const METHODS = {
-  compileANSI: ansiWorker.compileANSI,
+  compileANSI,
   viewAsANSI: () =>
     browser.tabs.executeScript(null, {code: "document.contentType"})
       .then(([type]) => {
@@ -69,53 +67,12 @@ browser.commands.onCommand.addListener(command => {
   METHODS[command]();
 });
 
-function createANSIWorker() {
-  let worker;
-  let error;
-  let nextId = 0;
-  const waitForResponse = new Map;
-  return {compileANSI};
-  
-  function init() {
-    worker = new Worker("/js/ansi-worker.js");
-    worker.addEventListener("error", onError);
-    worker.addEventListener("message", onMessage);
-  }
-  
-  function compileANSI(data) {
-    if (!worker) {
-      init();
-    }
-    return new Promise((resolve, reject) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      const requestId = nextId++;
-      worker.postMessage({requestId, data});
-      waitForResponse.set(requestId, {resolve, reject});
-    });
-  }
-  
-  function onError(err) {
-    error = err;
-  }
-  
-  function onMessage(e) {
-    if (e.data.error) {
-      waitForResponse.get(e.data.requestId).reject(e.data.data);
-    } else {
-      waitForResponse.get(e.data.requestId).resolve(e.data.data);
-    }
-    waitForResponse.delete(e.data.requestId);
-  }
-}
-
 function createANSIViewer() {
   const waitForUpdate = new Set;
   return {schedule, inject};
   
   function inject(tabId = null) {
+    const contentScripts = browser.runtime.getManifest().content_scripts;
     for (const file of contentScripts[0].js) {
       browser.tabs.executeScript(tabId, {file});
     }

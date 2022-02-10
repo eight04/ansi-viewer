@@ -1,6 +1,8 @@
 /* eslint-env webextensions */
-import {createPmore} from "./pmore.js";
-import {createScrollPosSaver} from "./scroll-pos-saver.js";
+import {createPmore} from "./lib/pmore.js";
+import {createScrollPosSaver} from "./lib/scroll-pos-saver.js";
+
+import "./content.css";
 
 function getBinary(file, type = "blob"){
   return new Promise((resolve, reject) => {
