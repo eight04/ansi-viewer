@@ -1,6 +1,6 @@
-import resolve from "rollup-plugin-node-resolve";
+import resolve from "@rollup/plugin-node-resolve";
 import cjs from "rollup-plugin-cjs-es";
-import json from "rollup-plugin-json";
+import json from "@rollup/plugin-json";
 import re from "rollup-plugin-re";
 
 export default {

@@ -1,7 +1,7 @@
-{
-  "node_modules/bbs-reader/bbs-reader.js": null,
-  "node_modules/pmore/src/frame.js": null,
-  "node_modules/pmore/src/pmore.js": null,
-  "node_modules/uao-js/table/b2u.json": null,
-  "node_modules/uao-js/table/u2b.json": null
-}
+[
+  "node_modules/bbs-reader/bbs-reader.js",
+  "node_modules/pmore/src/frame.js",
+  "node_modules/pmore/src/pmore.js",
+  "node_modules/uao-js/table/b2u.json",
+  "node_modules/uao-js/table/u2b.json"
+]
