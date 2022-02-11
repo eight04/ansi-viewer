@@ -15,7 +15,7 @@ browser.webRequest.onHeadersReceived.addListener(details => {
   if (details.statusCode !== 200) {
     return;
   }
-  const header = details.responseHeaders.find(h => h.name == "Content-Type");
+  const header = details.responseHeaders.find(h => /content-type/i.test(h.name));
   if (!header) {
     return;
   }
@@ -33,7 +33,12 @@ browser.webRequest.onHeadersReceived.addListener(details => {
     "*://*/*.bbs"
   ],
   types: ["main_frame"]
-}, ["blocking", "responseHeaders"]);
+}, [
+  "blocking",
+  "responseHeaders",
+  // https://crbug.com/945310
+  chrome.webRequest?.OnHeadersReceivedOptions?.EXTRA_HEADERS
+].filter(Boolean));
 
 const METHODS = {
   compileANSI,
