@@ -71,6 +71,11 @@ You can find the zip file in `web-ext-artifacts`.
 Changelog
 ---------
 
+* 4.0.0 (Feb 11, 2022)
+
+  - Refactor: build all dependencies.
+  - Fix: compatible with Chrome.
+
 * 3.0.0 (Jun 21, 2018)
 
   - Rewrite. Content scripts, background scripts, and worker are mostly bundled.
