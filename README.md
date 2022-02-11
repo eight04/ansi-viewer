@@ -1,6 +1,8 @@
 ANSI Viewer
 ===========
 
+[![.github/workflows/build.yml](https://github.com/eight04/ansi-viewer/actions/workflows/build.yml/badge.svg)](https://github.com/eight04/ansi-viewer/actions/workflows/build.yml)
+
 A Firefox addon which let you view .ans file in the browser.
 
 Features
