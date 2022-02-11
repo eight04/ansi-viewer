@@ -13,13 +13,14 @@
 		"tabs",
 		"webRequest",
 		"webRequestBlocking",
-    "<all_urls>"
+    "*://*/*.ans",
+    "*://*/*.ansi",
+    "*://*/*.bbs",
+    "file:///*"
 	],
 	
 	"background": {
 		"scripts": [
-      "js/browser-polyfill.min.js",
-			"js/background.js"
 		]
 	},
 	
@@ -30,12 +31,8 @@
       ],
       "include_globs": ["*.ans", "*.bbs", "*.ansi"],
       "js": [
-        "js/browser-polyfill.min.js",
-        "js/content.js"
       ],
       "css": [
-        "css/bbs-reader.css",
-        "css/viewer.css"
       ]
     }
 	],
