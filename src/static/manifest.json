@@ -13,7 +13,9 @@
 		"tabs",
 		"webRequest",
 		"webRequestBlocking",
-    "<all_urls>"
+    "*://*/*.ans",
+    "*://*/*.ansi",
+    "*://*/*.bbs"
 	],
 	
 	"background": {

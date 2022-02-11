@@ -19,14 +19,19 @@ browser.webRequest.onHeadersReceived.addListener(details => {
     return;
   }
   const url = new URL(details.url);
-  if (/\.(ans|bbs|ansi)$/.test(url.pathname) && VALID_CONTENT_TYPE.has(header.value)) {
+  if (VALID_CONTENT_TYPE.has(header.value) || header.value.endsWith("octet-stream")) {
     // FIXME: handle file requests
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1341341
     ansiViewer.schedule(details.tabId, details.url);
-    return {responseHeaders: details.responseHeaders.filter(h => h !== header)};
+    header.value = "text/plain";
+    return {responseHeaders: details.responseHeaders};
   }
 }, {
-  urls: ["<all_urls>"],
+  urls: [
+    "*://*/*.ans",
+    "*://*/*.ansi",
+    "*://*/*.bbs"
+  ],
   types: ["main_frame"]
 }, ["blocking", "responseHeaders"]);
 
