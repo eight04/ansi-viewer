@@ -17,6 +17,19 @@ Features
 * Live reload if the file is served from `file:`.
 * Support Firefox and Chrome.
 
+Install
+-------
+
+### Firefox
+
+Install from AMO:
+https://addons.mozilla.org/zh-TW/firefox/addon/ansi-viewer/
+
+### Chrome
+
+Download the latest release and load it as an unpacked extension:
+https://github.com/eight04/ansi-viewer/releases
+
 Screenshots
 -----------
 
@@ -28,17 +41,32 @@ Screenshots
 
 ![screenshot](http://i.imgur.com/s1uUlLH.png)
 
-Build the addon
----------------
+Build from source
+-----------------
 
-Files inside `extension/js` are built from `src` folder. Run `npm run build` to build them, or `node_modules/.bin/rollup -cw` to enter the watch mode.
+1. Install [Node.js](https://nodejs.org/en/)
+2. Clone the repo:
+    ```
+    git clone https://github.com/eight04/ansi-viewer.git && cd ansi-viewer
+    ```
+3. Install dependencies and build the extension:
+    ```
+    npm install && npm run build
+    ```
 
-This addon uses following libraries:
+### Run test
 
-* [bbs-reader](https://www.npmjs.com/package/bbs-reader): Compile ANSI string into HTML.
-* [pmore](https://www.npmjs.com/package/pmore): Run pmore animation with JavaScript.
-* [uao-js](https://www.npmjs.com/package/uao-js): Decode Big5-UAO content.
-* [webextension-polyfill](https://www.npmjs.com/package/webextension-polyfill): Chrome compatibility.
+```
+npm test
+```
+
+### Pack zip
+
+```
+npm run build-zip
+```
+
+You can find the zip file in `web-ext-artifacts`.
 
 Changelog
 ---------
