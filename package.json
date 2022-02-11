@@ -19,7 +19,7 @@
     "test": "eslint . --cache && npm run build && web-ext lint",
     "start": "web-ext run",
     "preversion": "npm test",
-    "version": "sync-version extension/manifest.json && npm run build && git add .",
+    "version": "sync-version src/static/manifest.json && npm run build && git add .",
     "build": "shx rm -rf dist && rollup -c",
     "build-zip": "web-ext build",
     "postversion": "npm run build-zip && git archive -o latest.zip HEAD && git push --follow-tags",
