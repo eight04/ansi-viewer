@@ -35,7 +35,7 @@ export default {
       exclude: [
         "node_modules/webextension-polyfill/**/*"
       ]
-    })
+    }),
     iife(),
     copy({
       rootDir: "src/static",
