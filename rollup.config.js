@@ -22,7 +22,8 @@ export default {
     resolve(),
     json(),
     styles({
-      mode: "extract"
+      mode: "extract",
+      minimize: true
     }),
     cjs({nested: true}),
     comlink({

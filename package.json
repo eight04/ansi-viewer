@@ -6,7 +6,6 @@
   "author": "eight04 <eight04@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@rollup/plugin-inject": "^4.0.4",
     "bbs-reader": "^0.3.1",
     "comlink": "^4.3.1",
     "pmore": "^0.1.1",
@@ -26,6 +25,7 @@
     "postversion": "npm run build && npm run build-zip && git push --follow-tags"
   },
   "devDependencies": {
+    "@rollup/plugin-inject": "^4.0.4",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@surma/rollup-plugin-comlink": "github:eight04/rollup-plugin-comlink#dev",
