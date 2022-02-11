@@ -1,19 +1,23 @@
 /* eslint-env webextensions */
 import {createPmore} from "./lib/pmore.js";
 import {createScrollPosSaver} from "./lib/scroll-pos-saver.js";
+import {getBinary} from "./lib/get-binary.js";
 
 import "./content.css";
 
-function getBinary(file, type = "blob"){
-  return new Promise((resolve, reject) => {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = type;
-    xhr.open("GET", file);
-    xhr.addEventListener("load", () =>
-      readBinaryString(xhr.response).then(resolve, reject)
-    );
-    xhr.addEventListener("error", () => reject(xhr));
-    xhr.send();
+let xhrErr = null;
+async function getBinaryX(url) {
+  if (!xhrErr) {
+    try {
+      return await getBinary(url);
+    } catch (err) {
+      console.error(err);
+      xhrErr = err;
+    }
+  }
+  return browser.runtime.sendMessage({
+    method: "getBinary",
+    data: url
   });
 }
 
@@ -24,19 +28,10 @@ function compileANSI(data) {
   });
 }
 
-function readBinaryString(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader;
-    reader.addEventListener("load", e => resolve(e.target.result));
-    reader.addEventListener("error", reject);
-    reader.readAsBinaryString(blob);
-  });
-}
-
 function createANSIViewer() {
   document.documentElement.style.background = "black";
   const pendingRoot = drawRoot();
-  const pendingBinary = getBinary(location.href);
+  const pendingBinary = getBinaryX(location.href);
   const pendingANSI = pendingBinary.then(compileANSI);
   const LOOP_TIMEOUT = 2000;
   
@@ -84,7 +79,7 @@ function createANSIViewer() {
   }
   
   function drawANSILoop(binary) {
-    getBinary(location.href)
+    getBinaryX(location.href)
       .then(newBinary => {
         if (newBinary == binary) {
           return;

@@ -59,7 +59,7 @@ export default {
         }
       },
       {
-        test: /content[^\\\/]*\.css/,
+        test: /content[^\\/]*\.css/,
         target: "dist/manifest.json",
         handle: (content, {scripts}) => {
           content.content_scripts[0].css.push(...scripts);
@@ -67,7 +67,7 @@ export default {
         }
       },
       {
-        test: /(.*\.worker[^\\\/]*\.js)/,
+        test: /(.*\.worker[^\\/]*\.js)/,
         target: "dist/$1",
         handle: (content, {scripts}) =>
           `importScripts(${JSON.stringify(scripts.slice(0, -1))});\n${content}`

@@ -15,7 +15,8 @@
 		"webRequestBlocking",
     "*://*/*.ans",
     "*://*/*.ansi",
-    "*://*/*.bbs"
+    "*://*/*.bbs",
+    "file:///*"
 	],
 	
 	"background": {

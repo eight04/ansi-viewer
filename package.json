@@ -14,7 +14,7 @@
     "webextension-polyfill": "^0.8.0"
   },
   "eslintIgnore": [
-    "extension"
+    "dist"
   ],
   "scripts": {
     "test": "eslint \"**/*.js\" --cache && web-ext lint",

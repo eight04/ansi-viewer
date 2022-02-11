@@ -1,5 +1,6 @@
 /* eslint-env webextensions */
 import {compileANSI} from "./lib/ansi.worker.js";
+import {getBinary} from "./lib/get-binary.js";
 
 const VALID_CONTENT_TYPE = new Set([
   "text/plain", "text/ansi", "text/x-ansi"
@@ -18,7 +19,6 @@ browser.webRequest.onHeadersReceived.addListener(details => {
   if (!header) {
     return;
   }
-  const url = new URL(details.url);
   if (VALID_CONTENT_TYPE.has(header.value) || header.value.endsWith("octet-stream")) {
     // FIXME: handle file requests
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1341341
@@ -44,7 +44,8 @@ const METHODS = {
           return ansiViewer.inject();
         }
       })
-      .catch(console.error)
+      .catch(console.error),
+  getBinary
 };
 
 browser.runtime.onMessage.addListener(message => {
