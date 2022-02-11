@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "eslint \"**/*.js\" --cache && web-ext lint",
+    "test": "eslint . --cache && npm run build && web-ext lint",
     "start": "web-ext run",
     "preversion": "npm test",
     "version": "sync-version extension/manifest.json && git add .",
