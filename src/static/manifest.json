@@ -1,6 +1,6 @@
 {
 	"manifest_version": 2,
-	"version": "3.0.0",
+	"version": "4.0.0",
 	"name": "ANSI Viewer",
 	
 	"description": "View ANSI file in the browser",
